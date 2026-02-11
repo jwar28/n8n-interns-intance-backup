@@ -1,0 +1,444 @@
+{
+  "updatedAt": "2026-02-06T16:41:47.447Z",
+  "createdAt": "2025-11-19T22:34:47.550Z",
+  "id": "QTjuz4vOYIHSpKwP",
+  "name": "dwh_ingest_brands",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "877941e2-4717-44c5-9895-254900ccd814",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/settings/brands",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=tjEI0Kk9WTptf5jaYI1+7S2/lwP72jH49dm3YjNF7YpBV2mYyCfBLG8uet0UAvuKv5RtGfz8QUfar2T9YjB7DSvVPJQfLuJqbftnA/xGf0fkPotsPN3aCjv1uqcY; AWSALBCORS=tjEI0Kk9WTptf5jaYI1+7S2/lwP72jH49dm3YjNF7YpBV2mYyCfBLG8uet0UAvuKv5RtGfz8QUfar2T9YjB7DSvVPJQfLuJqbftnA/xGf0fkPotsPN3aCjv1uqcY"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=tjEI0Kk9WTptf5jaYI1+7S2/lwP72jH49dm3YjNF7YpBV2mYyCfBLG8uet0UAvuKv5RtGfz8QUfar2T9YjB7DSvVPJQfLuJqbftnA/xGf0fkPotsPN3aCjv1uqcY;AWSALBCORS=tjEI0Kk9WTptf5jaYI1+7S2/lwP72jH49dm3YjNF7YpBV2mYyCfBLG8uet0UAvuKv5RtGfz8QUfar2T9YjB7DSvVPJQfLuJqbftnA/xGf0fkPotsPN3aCjv1uqcY;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4b1c03cb-4c3e-4429-bec3-a4129338b0fe",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "730cc81a-fe20-4fb6-9d5c-20da9f76bd4b",
+      "name": "Split brands"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "staging_metricool_events",
+          "mode": "list",
+          "cachedResultName": "staging_metricool_events"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        224
+      ],
+      "id": "b3295d72-261e-43ae-992c-b7a9affda0ad",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "staging_metricool_events",
+          "mode": "list",
+          "cachedResultName": "staging_metricool_events"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "brand_id": "={{ $json.id }}",
+            "social_network": "GLOBAL",
+            "endpoint": "/v2/settings/brands",
+            "raw_json": "={{ $json }}",
+            "fetched_at_utc": "={{ $now.format('yyyy-MM-dd/tt') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "social_network",
+              "displayName": "social_network",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "endpoint",
+              "displayName": "endpoint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_json",
+              "displayName": "raw_json",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fetched_at_utc",
+              "displayName": "fetched_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        624,
+        0
+      ],
+      "id": "6b76120c-05e0-4857-aaff-6e69fa0c36da",
+      "name": "Insert Staging Brands",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "dim_brand",
+          "mode": "list",
+          "cachedResultName": "dim_brand"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_shared": "={{ $json.raw_json.isShared }}",
+            "metricool_brand_id": "={{ $json.raw_json.id }}",
+            "name": "={{ $json.raw_json.label }}",
+            "page_url": "={{ $json.raw_json.title }}",
+            "description": "={{ $json.raw_json.description }}",
+            "image_url": "={{ $json.raw_json.image }}",
+            "owner_user_id": "={{ $json.raw_json.ownerUserId }}",
+            "default_timezone": "={{ $json.raw_json.timezone }}",
+            "created_at": "={{ $json.raw_json.joinDate.dateTime }}"
+          },
+          "matchingColumns": [
+            "metricool_brand_id"
+          ],
+          "schema": [
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "metricool_brand_id",
+              "displayName": "metricool_brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "page_url",
+              "displayName": "page_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "owner_user_id",
+              "displayName": "owner_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "is_shared",
+              "displayName": "is_shared",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "default_timezone",
+              "displayName": "default_timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        832,
+        0
+      ],
+      "id": "59add93c-c346-430a-ae8e-ea904acfd42c",
+      "name": "Insert or update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split brands",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split brands": {
+      "main": [
+        [
+          {
+            "node": "Insert Staging Brands",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Staging Brands": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e6edbe3f-adef-466c-9072-69e1832bac4f",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-19T22:34:47.550Z",
+      "createdAt": "2025-11-19T22:34:47.550Z",
+      "role": "workflow:owner",
+      "workflowId": "QTjuz4vOYIHSpKwP",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
