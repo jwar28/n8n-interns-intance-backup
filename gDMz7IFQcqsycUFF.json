@@ -1,0 +1,137 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Pick Pokemon": {
+      "main": [
+        [
+          {
+            "node": "Fetch from PokeAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch from PokeAPI": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Pick Pokemon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-28T01:22:33.929Z",
+  "id": "gDMz7IFQcqsycUFF",
+  "isArchived": true,
+  "meta": null,
+  "name": "PokeAPI Webhook (auto)",
+  "nodes": [
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "pokemon",
+              "value": "={{$json.query?.name || \"pikachu\"}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set",
+      "name": "Pick Pokemon",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        480,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{`https://pokeapi.co/api/v2/pokemon/${$json.pokemon}`}}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "http",
+      "name": "Fetch from PokeAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        704,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{({ ok: true, name: $json.name, id: $json.id, height: $json.height, weight: $json.weight, types: ($json.types||[]).map(t=>t.type?.name).filter(Boolean), sprite: $json.sprites?.front_default })}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        880,
+        304
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        304,
+        304
+      ],
+      "id": "ac8e10ba-e650-42b4-9c3b-08457dc51616",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionTimeout": 60,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-28T01:22:33.929Z",
+      "createdAt": "2026-01-28T01:22:33.929Z",
+      "role": "workflow:owner",
+      "workflowId": "gDMz7IFQcqsycUFF",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-06T13:43:22.767Z",
+  "versionId": "890b2be8-f7de-42fb-9a37-72b808d7ea84"
+}
