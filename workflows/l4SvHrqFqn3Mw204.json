@@ -1,0 +1,727 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-06T20:25:59.102Z",
+    "createdAt": "2026-01-06T20:25:59.102Z",
+    "versionId": "bf84506e-d162-4b22-bdad-9bd9cb09ecfb",
+    "workflowId": "l4SvHrqFqn3Mw204",
+    "nodes": [
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "social_networks",
+                "field2": "code"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          0,
+          -96
+        ],
+        "id": "183343f0-5a9f-4294-900e-85779a6b61d3",
+        "name": "Networks metadata"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "dim_social_network",
+            "mode": "list",
+            "cachedResultName": "dim_social_network"
+          },
+          "where": {
+            "values": [
+              {
+                "column": "code",
+                "value": "={{ $json.social_networks }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -224,
+          -16
+        ],
+        "id": "5839bbff-88c5-40ef-8eac-7618efbcff42",
+        "name": "Netword db data",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3e7e7246-2746-424c-9f39-8115f2683fe8",
+                "name": "db_brand_id",
+                "value": "={{ $json.brand_id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -448,
+          -208
+        ],
+        "id": "8a6c51b1-2336-447d-8f35-2b8d3dada9b3",
+        "name": "Brand id"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "social_networks",
+          "include": "allOtherFields",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -448,
+          -64
+        ],
+        "id": "b9caaa75-4eae-4fea-98ce-471fa91602cf",
+        "name": "Split Out settings"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -224,
+          -192
+        ],
+        "id": "f48432eb-0c83-4383-9497-c53fd699e70b",
+        "name": "Merge settings & brand id"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d800c6ed-13ce-4de4-9cc6-6e014b5994b6",
+                "name": "db_brand_id",
+                "value": "={{ $json.db_brand_id }}",
+                "type": "string"
+              },
+              {
+                "id": "e6a95579-ce19-4661-8699-8f9c1dc31219",
+                "name": "brand_id",
+                "value": "={{ $json.brandId }}",
+                "type": "string"
+              },
+              {
+                "id": "ec316df1-b7ae-404c-9082-94399c109f24",
+                "name": "date_from",
+                "value": "={{ $json.date_from }}",
+                "type": "string"
+              },
+              {
+                "id": "e5f02f98-8636-4b34-a06b-71d191134b1f",
+                "name": "date_to",
+                "value": "={{ $json.date_to }}",
+                "type": "string"
+              },
+              {
+                "id": "77485b83-4252-48c4-a818-dfbc677ec015",
+                "name": "social_network",
+                "value": "={{ $json.social_networks }}",
+                "type": "string"
+              },
+              {
+                "id": "3a0eeee6-481f-4eb9-af6a-24a60520b54d",
+                "name": "social_network_db_id",
+                "value": "={{ $json.social_network_id }}",
+                "type": "string"
+              },
+              {
+                "id": "d459dd60-7326-48cb-9df7-94c9da902846",
+                "name": "defaul_timezone",
+                "value": "={{ $json.default_timezone }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          224,
+          -96
+        ],
+        "id": "b4b3806e-52f2-49aa-81c5-ab22804eb835",
+        "name": "Return"
+      },
+      {
+        "parameters": {
+          "inputSource": "jsonExample",
+          "jsonExample": "{\n  \"social_networks\": [\n    \"FACEBOOK\",\n    \"INSTAGRAM\"\n  ],\n  \"brandId\": \"2539662\",\n  \"date_from\": \"2025-10-04T13:55:42\",\n  \"date_to\": \"2025-12-04T13:55:42\"\n}"
+        },
+        "id": "7ba6819f-3a5f-4635-940e-bb96f3489fb0",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          -896,
+          -64
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "dim_brand",
+            "mode": "list",
+            "cachedResultName": "dim_brand"
+          },
+          "where": {
+            "values": [
+              {
+                "column": "metricool_brand_id",
+                "value": "={{ $json.brandId }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -672,
+          -208
+        ],
+        "id": "0fac944e-e14e-4b5f-9940-4548cf0dfed3",
+        "name": "get db brand id",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Get the brand metadatada\n\nRequire:\n- A list of social networks to iterate on (can be 1)\n- Brand id of the company\n- Range of dates to search for   \n\n\nReturns:\n- Social network data with brand metadata\n",
+          "height": 608,
+          "width": 848
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -704,
+          -464
+        ],
+        "typeVersion": 1,
+        "id": "5dd83463-4525-4ddb-ba72-7b321fc5af5f",
+        "name": "Sticky Note"
+      }
+    ],
+    "connections": {
+      "Netword db data": {
+        "main": [
+          [
+            {
+              "node": "Networks metadata",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Brand id": {
+        "main": [
+          [
+            {
+              "node": "Merge settings & brand id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out settings": {
+        "main": [
+          [
+            {
+              "node": "Merge settings & brand id",
+              "type": "main",
+              "index": 1
+            },
+            {
+              "node": "Netword db data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge settings & brand id": {
+        "main": [
+          [
+            {
+              "node": "Networks metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Split Out settings",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "get db brand id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Networks metadata": {
+        "main": [
+          [
+            {
+              "node": "Return",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get db brand id": {
+        "main": [
+          [
+            {
+              "node": "Brand id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "bf84506e-d162-4b22-bdad-9bd9cb09ecfb",
+  "basePath": "workflows",
+  "connections": {
+    "Netword db data": {
+      "main": [
+        [
+          {
+            "node": "Networks metadata",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Brand id": {
+      "main": [
+        [
+          {
+            "node": "Merge settings & brand id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out settings": {
+      "main": [
+        [
+          {
+            "node": "Merge settings & brand id",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Netword db data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge settings & brand id": {
+      "main": [
+        [
+          {
+            "node": "Networks metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Split Out settings",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "get db brand id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Networks metadata": {
+      "main": [
+        [
+          {
+            "node": "Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get db brand id": {
+      "main": [
+        [
+          {
+            "node": "Brand id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-03T22:10:06.408Z",
+  "id": "l4SvHrqFqn3Mw204",
+  "isArchived": false,
+  "meta": null,
+  "name": "dwh_sw_get_socials_metadata",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "social_networks",
+              "field2": "code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        -96
+      ],
+      "id": "183343f0-5a9f-4294-900e-85779a6b61d3",
+      "name": "Networks metadata"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "dim_social_network",
+          "mode": "list",
+          "cachedResultName": "dim_social_network"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "code",
+              "value": "={{ $json.social_networks }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "5839bbff-88c5-40ef-8eac-7618efbcff42",
+      "name": "Netword db data",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3e7e7246-2746-424c-9f39-8115f2683fe8",
+              "name": "db_brand_id",
+              "value": "={{ $json.brand_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -448,
+        -208
+      ],
+      "id": "8a6c51b1-2336-447d-8f35-2b8d3dada9b3",
+      "name": "Brand id"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "social_networks",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -64
+      ],
+      "id": "b9caaa75-4eae-4fea-98ce-471fa91602cf",
+      "name": "Split Out settings"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -224,
+        -192
+      ],
+      "id": "f48432eb-0c83-4383-9497-c53fd699e70b",
+      "name": "Merge settings & brand id"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d800c6ed-13ce-4de4-9cc6-6e014b5994b6",
+              "name": "db_brand_id",
+              "value": "={{ $json.db_brand_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e6a95579-ce19-4661-8699-8f9c1dc31219",
+              "name": "brand_id",
+              "value": "={{ $json.brandId }}",
+              "type": "string"
+            },
+            {
+              "id": "ec316df1-b7ae-404c-9082-94399c109f24",
+              "name": "date_from",
+              "value": "={{ $json.date_from }}",
+              "type": "string"
+            },
+            {
+              "id": "e5f02f98-8636-4b34-a06b-71d191134b1f",
+              "name": "date_to",
+              "value": "={{ $json.date_to }}",
+              "type": "string"
+            },
+            {
+              "id": "77485b83-4252-48c4-a818-dfbc677ec015",
+              "name": "social_network",
+              "value": "={{ $json.social_networks }}",
+              "type": "string"
+            },
+            {
+              "id": "3a0eeee6-481f-4eb9-af6a-24a60520b54d",
+              "name": "social_network_db_id",
+              "value": "={{ $json.social_network_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d459dd60-7326-48cb-9df7-94c9da902846",
+              "name": "defaul_timezone",
+              "value": "={{ $json.default_timezone }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -96
+      ],
+      "id": "b4b3806e-52f2-49aa-81c5-ab22804eb835",
+      "name": "Return"
+    },
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"social_networks\": [\n    \"FACEBOOK\",\n    \"INSTAGRAM\"\n  ],\n  \"brandId\": \"2539662\",\n  \"date_from\": \"2025-10-04T13:55:42\",\n  \"date_to\": \"2025-12-04T13:55:42\"\n}"
+      },
+      "id": "7ba6819f-3a5f-4635-940e-bb96f3489fb0",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -896,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "dim_brand",
+          "mode": "list",
+          "cachedResultName": "dim_brand"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "metricool_brand_id",
+              "value": "={{ $json.brandId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -672,
+        -208
+      ],
+      "id": "0fac944e-e14e-4b5f-9940-4548cf0dfed3",
+      "name": "get db brand id",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Get the brand metadatada\n\nRequire:\n- A list of social networks to iterate on (can be 1)\n- Brand id of the company\n- Range of dates to search for   \n\n\nReturns:\n- Social network data with brand metadata\n",
+        "height": 608,
+        "width": 848
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -704,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "5dd83463-4525-4ddb-ba72-7b321fc5af5f",
+      "name": "Sticky Note"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "social_networks": [
+            "FACEBOOK",
+            "INSTAGRAM"
+          ],
+          "brandId": "2539662",
+          "date_from": "2025-10-04T13:55:42",
+          "date_to": "2025-12-04T13:55:42"
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-03T22:10:06.408Z",
+      "createdAt": "2025-12-03T22:10:06.408Z",
+      "role": "workflow:owner",
+      "workflowId": "l4SvHrqFqn3Mw204",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-04T15:34:32.169Z",
+  "versionId": "bf84506e-d162-4b22-bdad-9bd9cb09ecfb"
+}
