@@ -1,0 +1,375 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "basePath": "workflows",
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Get followers by country",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get followers by city",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get followers by country": {
+      "main": [
+        [
+          {
+            "node": "Normalize response country",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get followers by city": {
+      "main": [
+        [
+          {
+            "node": "Normalize response city",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize response country": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize response city": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-09T00:18:34.410Z",
+  "id": "vnHPjRpQTuleTYqv",
+  "isArchived": false,
+  "meta": null,
+  "name": "exp-followers-demographic",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "e2f2d8b8-51e4-4c77-8e03-5db5da33e4a3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "provider",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "id": "81826e2b-3689-4963-99c1-680bf96b0307",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "provider",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        96
+      ],
+      "id": "b20b2b11-f4f4-4404-93a2-cb411e6e7344",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ISO2 Dict\nconst countryMap = {\n  CO: \"Colombia\",\n  MX: \"México\",\n  US: \"Estados Unidos\",\n  ES: \"España\",\n  BR: \"Brasil\",\n  GB: \"Reino Unido\",\n  AR: \"Argentina\",\n  CL: \"Chile\",\n  PE: \"Perú\",\n  PT: \"Portugal\",\n  DO: \"República Dominicana\",\n  CA: \"Canadá\",\n  CR: \"Costa Rica\",\n  VE: \"Venezuela\",\n  EC: \"Ecuador\",\n  DE: \"Alemania\",\n  FR: \"Francia\",\n  NL: \"Países Bajos\",\n  CH: \"Suiza\",\n  IN: \"India\",\n  ID: \"Indonesia\",\n  PH: \"Filipinas\",\n  PK: \"Pakistán\",\n  BD: \"Bangladesh\",\n  NG: \"Nigeria\",\n  MA: \"Marruecos\",\n  IT: \"Italia\",\n  CZ: \"Chequia\",\n  DZ: \"Argelia\",\n  EG: \"Egipto\",\n  BO: \"Bolivia\",\n  PA: \"Panamá\",\n  SV: \"El Salvador\",\n  AD: \"Andorra\",\n  MT: \"Malta\",\n  UY: \"Uruguay\",\n  PY: \"Paraguay\",\n  BH: \"Baréin\",\n};\n\nconst toSortedArray = (obj, mapper) =>\n  Object.entries(obj || {})\n    .map(mapper)\n    .filter(x => (Number(x.value) || 0) > 0)\n    .sort((a, b) => b.value - a.value);\n\nreturn items.map(item => {\n  const provider = item.json.provider;\n\n  const countriesObj = item.json.followers_from_country || {};\n  const citiesObj = item.json.followers_from_city || {};\n\n  const countries = toSortedArray(countriesObj, ([code, value]) => ({\n    code,\n    country: countryMap[code] || code,\n    value: Number(value) || 0,\n  }));\n\n  const cities = toSortedArray(citiesObj, ([name, value]) => ({\n    city: name,\n    value: Number(value) || 0,\n  }));\n\n  // Output\n  return {\n    json: {\n      provider,\n      countries,\n      cities,\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        96
+      ],
+      "id": "338d13b3-6fa4-481f-9de6-de7d840fdc01",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.metricool.com/api/stats/country/{{ $json.provider }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=UMmrQ/Vs5XT29Q1MfxQkZH823t3cEg8xaC5LfJd+faad9Gw91jWdHSBdIM3eB5Axp+85xQOdw+CksZbyhoxj9YSdERqxY466wJ3vUlmNbV4O7HjFwRJ8XtdZwp6t; AWSALBCORS=UMmrQ/Vs5XT29Q1MfxQkZH823t3cEg8xaC5LfJd+faad9Gw91jWdHSBdIM3eB5Axp+85xQOdw+CksZbyhoxj9YSdERqxY466wJ3vUlmNbV4O7HjFwRJ8XtdZwp6t"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=UMmrQ/Vs5XT29Q1MfxQkZH823t3cEg8xaC5LfJd+faad9Gw91jWdHSBdIM3eB5Axp+85xQOdw+CksZbyhoxj9YSdERqxY466wJ3vUlmNbV4O7HjFwRJ8XtdZwp6t;AWSALBCORS=UMmrQ/Vs5XT29Q1MfxQkZH823t3cEg8xaC5LfJd+faad9Gw91jWdHSBdIM3eB5Axp+85xQOdw+CksZbyhoxj9YSdERqxY466wJ3vUlmNbV4O7HjFwRJ8XtdZwp6t;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        0
+      ],
+      "id": "6b68bf22-d082-4bd4-8ab9-ff1767aefce0",
+      "name": "Get followers by country"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.metricool.com/api/stats/city/{{ $json.provider }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=ygtw6wH/9bm3yyRhus1ykNU5peItW5Zaw3TKtcHLNHhd46NuROvMPaiU1+DdpGSHLULmlGaZjIXgINR5zWTwV7D0ZZ5XrlhepBHDO99u17itCL8h6L21PXVyGjHh; AWSALBCORS=ygtw6wH/9bm3yyRhus1ykNU5peItW5Zaw3TKtcHLNHhd46NuROvMPaiU1+DdpGSHLULmlGaZjIXgINR5zWTwV7D0ZZ5XrlhepBHDO99u17itCL8h6L21PXVyGjHh"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=ygtw6wH/9bm3yyRhus1ykNU5peItW5Zaw3TKtcHLNHhd46NuROvMPaiU1+DdpGSHLULmlGaZjIXgINR5zWTwV7D0ZZ5XrlhepBHDO99u17itCL8h6L21PXVyGjHh;AWSALBCORS=ygtw6wH/9bm3yyRhus1ykNU5peItW5Zaw3TKtcHLNHhd46NuROvMPaiU1+DdpGSHLULmlGaZjIXgINR5zWTwV7D0ZZ5XrlhepBHDO99u17itCL8h6L21PXVyGjHh;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        192
+      ],
+      "id": "c2107d3b-29d5-4c7f-9b85-ee9e3523cf77",
+      "name": "Get followers by city"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "p1",
+              "name": "provider",
+              "value": "={{ $('Split Out').item.json.provider }}",
+              "type": "string"
+            },
+            {
+              "id": "p2",
+              "name": "followers_from_country",
+              "value": "={{ $json }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        0
+      ],
+      "id": "d29190ba-a4dc-49e4-b62e-0e2d29c9c072",
+      "name": "Normalize response country"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "p1",
+              "name": "provider",
+              "value": "={{ $('Split Out').item.json.provider }}",
+              "type": "string"
+            },
+            {
+              "id": "p2",
+              "name": "followers_from_city",
+              "value": "={{ $json }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        192
+      ],
+      "id": "a456cd5b-058a-4dde-989e-24b48c9b8a7a",
+      "name": "Normalize response city"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b80dd935-9352-41de-9e5a-6e8756c1a618",
+              "name": "provider",
+              "value": "[\"facebook\", \"instagram\", \"youtube\", \"linkedin\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        96
+      ],
+      "id": "0f7a43f7-a93e-44f3-bb09-b435e1be1587",
+      "name": "Settings"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-09T00:18:34.410Z",
+      "createdAt": "2026-02-09T00:18:34.410Z",
+      "role": "workflow:owner",
+      "workflowId": "vnHPjRpQTuleTYqv",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-09T00:44:39.077Z",
+  "versionId": "2eb14eaf-15b4-4517-ab77-2146c291ba09"
+}
