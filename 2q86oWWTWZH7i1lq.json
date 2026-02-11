@@ -1,0 +1,1100 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get user data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get brand list": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Get relevant fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get relevant fields": {
+      "main": [
+        []
+      ]
+    },
+    "Get user data": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get brand list",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get user api calls (Past 7 days)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get anniq data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Api calls": {
+      "main": [
+        [
+          {
+            "node": "Count total calls in x time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count total calls in x time": {
+      "main": [
+        []
+      ]
+    },
+    "Get anniq data": {
+      "main": [
+        [
+          {
+            "node": "Get relevant data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get linkedin posts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get linkedin posts1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get relevant data": {
+      "main": [
+        [
+          {
+            "node": "Get social media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get social media": {
+      "main": [
+        [
+          {
+            "node": "Get scheduled posts (Next 7 days)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get brand posts (Past 7 days)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Scheduled posts": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out published posts": {
+      "main": [
+        [
+          {
+            "node": "Sort by metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort by metrics": {
+      "main": [
+        [
+          {
+            "node": "Top 5 best post of the last week",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get scheduled posts (Next 7 days)": {
+      "main": [
+        [
+          {
+            "node": "Split Scheduled posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get user api calls (Past 7 days)": {
+      "main": [
+        [
+          {
+            "node": "Split Out Api calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get brand posts (Past 7 days)": {
+      "main": [
+        [
+          {
+            "node": "Split Out published posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Top 5 best post of the last week": {
+      "main": [
+        []
+      ]
+    },
+    "Summarize": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-11-18T05:36:01.892Z",
+  "id": "2q86oWWTWZH7i1lq",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "general_analysis",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        192
+      ],
+      "id": "1c3ef42b-b829-4088-90f9-5f27cffaf2eb",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/settings/brands",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=I4hQXYx/hesPQKSRiHcBn45JNYD+kK/3kSA5VhBy/9BZf88mFo5eOgO7oswTEbcIfmGoDVBEW202f990CuGzCvl55eYVwyEXrn/lvkHEd0qzIoKH53Pq5GaRrcmQ; AWSALBCORS=I4hQXYx/hesPQKSRiHcBn45JNYD+kK/3kSA5VhBy/9BZf88mFo5eOgO7oswTEbcIfmGoDVBEW202f990CuGzCvl55eYVwyEXrn/lvkHEd0qzIoKH53Pq5GaRrcmQ"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=I4hQXYx/hesPQKSRiHcBn45JNYD+kK/3kSA5VhBy/9BZf88mFo5eOgO7oswTEbcIfmGoDVBEW202f990CuGzCvl55eYVwyEXrn/lvkHEd0qzIoKH53Pq5GaRrcmQ;AWSALBCORS=I4hQXYx/hesPQKSRiHcBn45JNYD+kK/3kSA5VhBy/9BZf88mFo5eOgO7oswTEbcIfmGoDVBEW202f990CuGzCvl55eYVwyEXrn/lvkHEd0qzIoKH53Pq5GaRrcmQ;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        -192
+      ],
+      "id": "20a6aaf0-17d8-4569-8c8f-1d6e3d116b89",
+      "name": "Get brand list"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -192
+      ],
+      "id": "5612caa1-8a97-4009-b77b-f45d657fefe0",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e5f1215-8130-46e5-9e4e-1c75dc8c9de9",
+              "name": "brand_id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b3ed8c8f-6776-4fdc-ba33-ffe3f6b06466",
+              "name": "brand_name",
+              "value": "={{ $json.label }}",
+              "type": "string"
+            },
+            {
+              "id": "f62c0751-c201-40c6-93c6-73b457647e97",
+              "name": "brand_title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "e8d0ae95-ba57-4e57-9595-070866c80298",
+              "name": "brand_owner",
+              "value": "={{ $json.ownerUsername }}",
+              "type": "string"
+            },
+            {
+              "id": "3634346c-56fe-482d-9ebf-e6f1446572e9",
+              "name": "engagementRatio",
+              "value": "={{ $json.engagementRatio }}",
+              "type": "number"
+            },
+            {
+              "id": "bee161c8-c0a4-424f-bc1c-7029984afa73",
+              "name": "joinDate",
+              "value": "={{ $json.joinDate }}",
+              "type": "object"
+            },
+            {
+              "id": "e9440680-df79-43ed-87a2-50d5ce1ee268",
+              "name": "firstConnectionDate",
+              "value": "={{ $json.firstConnectionDate }}",
+              "type": "object"
+            },
+            {
+              "id": "9ffd56b4-b453-46b5-8859-8e3fedca6bb2",
+              "name": "brand_timezone",
+              "value": "={{ $json.timezone }}",
+              "type": "string"
+            },
+            {
+              "id": "dce38f0b-d495-4549-9d82-e2d556117f05",
+              "name": "brand_social_media",
+              "value": "={{ $json.networksData }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        -192
+      ],
+      "id": "bd1d33d9-c4df-4f2b-b5f7-b0f7882cc015",
+      "name": "Get relevant fields"
+    },
+    {
+      "parameters": {
+        "content": "## Brands extraction\nGet 18 brands, we only keep relevant info",
+        "height": 288,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "beb99ed7-849e-4166-adc1-095825d0be27",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/settings/users/2065617",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=du9xInaWEvAIIEtnjwDEs1kql3KYQ2iNAIQwN00HjNJKfOTmFLBAe2I2WY8GJOjrh6NJMY+libsanS/s1uxNBCiqId2Ceoioq0HHTz5xvW8DDVeFUZSLqDiRHfx0; AWSALBCORS=du9xInaWEvAIIEtnjwDEs1kql3KYQ2iNAIQwN00HjNJKfOTmFLBAe2I2WY8GJOjrh6NJMY+libsanS/s1uxNBCiqId2Ceoioq0HHTz5xvW8DDVeFUZSLqDiRHfx0"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=du9xInaWEvAIIEtnjwDEs1kql3KYQ2iNAIQwN00HjNJKfOTmFLBAe2I2WY8GJOjrh6NJMY+libsanS/s1uxNBCiqId2Ceoioq0HHTz5xvW8DDVeFUZSLqDiRHfx0;AWSALBCORS=du9xInaWEvAIIEtnjwDEs1kql3KYQ2iNAIQwN00HjNJKfOTmFLBAe2I2WY8GJOjrh6NJMY+libsanS/s1uxNBCiqId2Ceoioq0HHTz5xvW8DDVeFUZSLqDiRHfx0;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -432,
+        192
+      ],
+      "id": "7a195960-f8ab-4d15-b021-cbb334704e79",
+      "name": "Get user data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f05ed71-3762-4913-a077-71e38688f393",
+              "name": "user_id",
+              "value": "={{ $json.data.id }}",
+              "type": "number"
+            },
+            {
+              "id": "9612b23f-cbc9-4d51-9a39-d781f19debc0",
+              "name": "username",
+              "value": "={{ $json.data.userName }}",
+              "type": "string"
+            },
+            {
+              "id": "8702e49a-da3c-42e6-8fb6-0e852bb3cb82",
+              "name": "full_name",
+              "value": "={{ $json.data.name }} {{ $json.data.lastName }}",
+              "type": "string"
+            },
+            {
+              "id": "aefdf9ff-95a6-46cd-b2b3-b5e576ca47a7",
+              "name": "user_role",
+              "value": "={{ $json.data.role }}",
+              "type": "string"
+            },
+            {
+              "id": "7af4c42c-7bb2-4ff4-9177-272076b3b983",
+              "name": "user_language",
+              "value": "={{ $json.data.language }}",
+              "type": "string"
+            },
+            {
+              "id": "7e8c3281-8764-4dec-af21-6d909651e0c8",
+              "name": "user_timezone",
+              "value": "={{ $json.data.timezone }}",
+              "type": "string"
+            },
+            {
+              "id": "23ce4c29-7d9a-4f98-a0c4-0657e3428788",
+              "name": "user_brands",
+              "value": "={{ $json.data.activeBrands }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        192
+      ],
+      "id": "9256a27d-555d-42f6-b320-0473b319bfe0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        944,
+        176
+      ],
+      "id": "8edb8605-60c8-4f07-ba5e-9ad91f977102",
+      "name": "Split Out Api calls"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "calls"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "endpoint",
+        "options": {
+          "outputFormat": "separateItems"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1168,
+        176
+      ],
+      "id": "5cd2312a-01ad-4f2c-b9d4-63d36d93bb9b",
+      "name": "Count total calls in x time",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "## Get api info from anniq\nThere was 231 api calls in the last 7 days to /api/v2/scheduler/posts",
+        "height": 288,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "f610dfc3-f55d-4cdf-8aab-dab7e005250c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/settings/brands/2539662",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=y3t7XOwShw3WzDyZwraktJS8pzNkGtMIcfzHcuXFthJNywrWqTn2BogeUhoar1QZGjww6yovTnQf1s2bFF7RDUaaEPuT66MgBa7itU1DV3eaWydt4rl7e+JhCCi6; AWSALBCORS=y3t7XOwShw3WzDyZwraktJS8pzNkGtMIcfzHcuXFthJNywrWqTn2BogeUhoar1QZGjww6yovTnQf1s2bFF7RDUaaEPuT66MgBa7itU1DV3eaWydt4rl7e+JhCCi6"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=y3t7XOwShw3WzDyZwraktJS8pzNkGtMIcfzHcuXFthJNywrWqTn2BogeUhoar1QZGjww6yovTnQf1s2bFF7RDUaaEPuT66MgBa7itU1DV3eaWydt4rl7e+JhCCi6;AWSALBCORS=y3t7XOwShw3WzDyZwraktJS8pzNkGtMIcfzHcuXFthJNywrWqTn2BogeUhoar1QZGjww6yovTnQf1s2bFF7RDUaaEPuT66MgBa7itU1DV3eaWydt4rl7e+JhCCi6;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -96,
+        576
+      ],
+      "id": "2bbaac7e-04c6-487c-b5ff-65d7040bea7d",
+      "name": "Get anniq data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json.data;\n\nconst networkKeys = Object.keys(data.networksData);\nconst availableNetworks = [];\n\nnetworkKeys.forEach(k => {\n  // Append only if data exits\n  if (data.networksData[k] && Object.keys(data.networksData[k]).length > 0) {\n    availableNetworks.push(k.replace('Data','').toLowerCase());\n  }\n});\n\nreturn [\n  {\n    json: {\n      ...data,\n      networksData: availableNetworks\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        576
+      ],
+      "id": "543152b7-bc57-4fdc-ac0a-902f079ec102",
+      "name": "Get social media"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "data.userId, data.description, data.isShared, data.whiteLabelData, data.hash, data.version, data.deleted, data.lastResolvedInboxMessageTimestamp, data.lastReadInboxMessageTimestamp, data.availableConnectors, data.isDemo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        576
+      ],
+      "id": "30164082-6315-43d4-b031-9eb7ab2195d8",
+      "name": "Get relevant data"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        944,
+        560
+      ],
+      "id": "6d6c8131-56a6-4a78-999f-43d55520be56",
+      "name": "Split Scheduled posts"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "providers[0].network"
+            },
+            {
+              "field": "providers[0].network"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "providers[0].network",
+        "options": {
+          "outputFormat": "separateItems"
+        }
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1168,
+        560
+      ],
+      "id": "d03c9bc3-0e41-4606-930c-34f59a730df8",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "content": "## Scheduled posts\nHere we can see the scheduled post for the next 7 days for anniq\nThere are: 4 for linkedin, 5 for instagram, and 6 for facebook",
+        "height": 320,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "8434a6d4-8103-4539-980e-d6584063d14d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        944,
+        976
+      ],
+      "id": "45ebbf1c-1372-419c-b7fb-663728ab7113",
+      "name": "Split Out published posts"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "metrics.INTERACTIONS",
+              "order": "descending"
+            },
+            {
+              "fieldName": "metrics.IMPRESSIONS",
+              "order": "descending"
+            },
+            {
+              "fieldName": "metrics.ENGAGEMENT",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        976
+      ],
+      "id": "611514ed-16bb-41e3-94e4-e95405a7a32a",
+      "name": "Sort by metrics"
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        976
+      ],
+      "id": "0592f50b-f801-4315-aee9-6ad88dc18c26",
+      "name": "Top 5 best post of the last week"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/scheduler/posts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{$now.toFormat(\"yyyy-MM-dd'T'HH:mm:ss\")}}"
+            },
+            {
+              "name": "end",
+              "value": "={{$now.plus({ days: 14 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss\")}}"
+            },
+            {
+              "name": "timezone",
+              "value": "America/Chicago"
+            },
+            {
+              "name": "extendedRange",
+              "value": "TRUE"
+            },
+            {
+              "name": "?blogId",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.ownerUserId }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=hmcIgC1dS5klWFLBPAyqBKxXycGsjdJxGANs8VLS/9bhiPMnJQIYlYK7ZvA2VADUJnRzlMwe95CtGUFH4Zpr7iARCoTm+WbxSFYH9vEroiD/xBPyDLZbceolVhl1; AWSALBCORS=hmcIgC1dS5klWFLBPAyqBKxXycGsjdJxGANs8VLS/9bhiPMnJQIYlYK7ZvA2VADUJnRzlMwe95CtGUFH4Zpr7iARCoTm+WbxSFYH9vEroiD/xBPyDLZbceolVhl1"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=hmcIgC1dS5klWFLBPAyqBKxXycGsjdJxGANs8VLS/9bhiPMnJQIYlYK7ZvA2VADUJnRzlMwe95CtGUFH4Zpr7iARCoTm+WbxSFYH9vEroiD/xBPyDLZbceolVhl1;AWSALBCORS=hmcIgC1dS5klWFLBPAyqBKxXycGsjdJxGANs8VLS/9bhiPMnJQIYlYK7ZvA2VADUJnRzlMwe95CtGUFH4Zpr7iARCoTm+WbxSFYH9vEroiD/xBPyDLZbceolVhl1;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        560
+      ],
+      "id": "00a35534-e3c1-4a1f-96d6-208a1c9ed2d2",
+      "name": "Get scheduled posts (Next 7 days)"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/settings/users/2065617/api-usage-stats",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{$now.minus({ days: 7 }).toFormat(\"dd/M/yyyy\")}}"
+            },
+            {
+              "name": "to",
+              "value": "={{$now.toFormat(\"dd/M/yyyy\")}}"
+            },
+            {
+              "name": "aggregation",
+              "value": "DAY"
+            },
+            {
+              "name": "includeEndpoints",
+              "value": "true"
+            },
+            {
+              "name": "?blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=I3tiCdaU3cdT/Ni8yj3qBVbUQ5p4M/hldn9RDDDdNRbmm7frS3pn6wv2IA1UkB4lFLKWRcVf3Fz36YywO5sGWgrycvkxC5CPAL7RpG48L9TBYFAXi5KRDTpfSWjv; AWSALBCORS=I3tiCdaU3cdT/Ni8yj3qBVbUQ5p4M/hldn9RDDDdNRbmm7frS3pn6wv2IA1UkB4lFLKWRcVf3Fz36YywO5sGWgrycvkxC5CPAL7RpG48L9TBYFAXi5KRDTpfSWjv"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=I3tiCdaU3cdT/Ni8yj3qBVbUQ5p4M/hldn9RDDDdNRbmm7frS3pn6wv2IA1UkB4lFLKWRcVf3Fz36YywO5sGWgrycvkxC5CPAL7RpG48L9TBYFAXi5KRDTpfSWjv;AWSALBCORS=I3tiCdaU3cdT/Ni8yj3qBVbUQ5p4M/hldn9RDDDdNRbmm7frS3pn6wv2IA1UkB4lFLKWRcVf3Fz36YywO5sGWgrycvkxC5CPAL7RpG48L9TBYFAXi5KRDTpfSWjv;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        176
+      ],
+      "id": "486a0b44-9874-4358-aab5-535b5776bc0f",
+      "name": "Get user api calls (Past 7 days)"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/analytics/brand-summary/posts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{$now.minus({ days: 7 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss\")}}"
+            },
+            {
+              "name": "to",
+              "value": "={{$now.toFormat(\"yyyy-MM-dd'T'HH:mm:ss\")}}"
+            },
+            {
+              "name": "timezone",
+              "value": "={{ $json.timezone }}"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.ownerUserId }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi; AWSALBCORS=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi;AWSALBCORS=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        976
+      ],
+      "id": "303d0d15-f69d-49d8-9209-a5c1855ad94b",
+      "name": "Get brand posts (Past 7 days)"
+    },
+    {
+      "parameters": {
+        "content": "## Get past days posts\nCheck sort to see the best post of the past week",
+        "height": 368,
+        "width": 928
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        848
+      ],
+      "typeVersion": 1,
+      "id": "78654ddd-3314-4913-b43e-4da13d4315be",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/analytics/posts/linkedin",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $now.minus(7, 'days').format(\"yyyy-MM-dd'T'HH:mm:ss\") }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $now.format(\"yyyy-MM-dd'T'HH:mm:ss\") }}"
+            },
+            {
+              "name": "timezone",
+              "value": "={{ $json.data.timezone }}"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.data.userId }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=0FfJU2or2jie6E983yDEzpNK3luY+bYXq4gOXCg96B1Ya7Ur/EZZ6So9ifhlYqmuEUXrsE7xeYpI3SIwB3SwvIMddu9VICTvd0pg+rHbqNlIOGbjMMz+OWtQEthY; AWSALBCORS=0FfJU2or2jie6E983yDEzpNK3luY+bYXq4gOXCg96B1Ya7Ur/EZZ6So9ifhlYqmuEUXrsE7xeYpI3SIwB3SwvIMddu9VICTvd0pg+rHbqNlIOGbjMMz+OWtQEthY"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=0FfJU2or2jie6E983yDEzpNK3luY+bYXq4gOXCg96B1Ya7Ur/EZZ6So9ifhlYqmuEUXrsE7xeYpI3SIwB3SwvIMddu9VICTvd0pg+rHbqNlIOGbjMMz+OWtQEthY;AWSALBCORS=0FfJU2or2jie6E983yDEzpNK3luY+bYXq4gOXCg96B1Ya7Ur/EZZ6So9ifhlYqmuEUXrsE7xeYpI3SIwB3SwvIMddu9VICTvd0pg+rHbqNlIOGbjMMz+OWtQEthY;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -512,
+        1168
+      ],
+      "id": "d1fbcb0a-da5e-4ae2-9825-331c2bfe24a6",
+      "name": "Get linkedin posts"
+    },
+    {
+      "parameters": {
+        "url": "https://app.metricool.com/api/v2/analytics/posts/facebook",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $now.minus(7, 'days').format(\"yyyy-MM-dd'T'HH:mm:ss\") }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $now.format(\"yyyy-MM-dd'T'HH:mm:ss\") }}"
+            },
+            {
+              "name": "timezone",
+              "value": "={{ $json.data.timezone }}"
+            },
+            {
+              "name": "userId",
+              "value": "={{ $json.data.userId }}"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi; AWSALBCORS=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi;AWSALBCORS=r7qyK8iagwHmLX+Ke5RfwgVhsWMS/Pgq7xPe6q2CKfXs79Ws3FDwxPv3t8nRufbhfksUDRMBX/zl1nqpSmKMS6VRKZZZIURynOY5LAFzKs2OpfRZ+I46+GeIQPPi;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -512,
+        1392
+      ],
+      "id": "2f9b16b8-8456-4960-b5b3-0ddf935f4b3d",
+      "name": "Get linkedin posts1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-18T05:36:01.892Z",
+      "createdAt": "2025-11-18T05:36:01.892Z",
+      "role": "workflow:owner",
+      "workflowId": "2q86oWWTWZH7i1lq",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-04T16:03:23.841Z",
+  "versionId": "8ecacb5c-da8f-4978-9c51-e3c34ba8c127"
+}
