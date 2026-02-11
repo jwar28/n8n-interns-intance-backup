@@ -1,0 +1,2357 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-06T17:41:43.556Z",
+    "createdAt": "2026-02-06T17:41:42.078Z",
+    "versionId": "bf11c25f-e6d9-4339-b055-0e92037f8abb",
+    "workflowId": "7GJEGURpnHFxsL0U",
+    "nodes": [
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a5687a0e-819b-4495-9f01-2b79db377a68",
+                "name": "norm_brand_id",
+                "value": "={{ $json.raw_json.db_brand_id }}",
+                "type": "string"
+              },
+              {
+                "id": "801bb5ba-61b0-4d11-b360-5c90ea97309e",
+                "name": "norm_social_network",
+                "value": "={{ $json.raw_json.code }}",
+                "type": "string"
+              },
+              {
+                "id": "6e632d4e-0de2-4fa1-943a-5be04bc3c2a8",
+                "name": "norm_external_post_id",
+                "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? $json.raw_json.storyId\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.postId\n    : ''\n}}",
+                "type": "string"
+              },
+              {
+                "id": "c32605bc-02bc-4235-9869-ad275f4693ce",
+                "name": "norm_external_account_id",
+                "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? $json.raw_json.pageId\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.businessId\n    : ''\n}}\n",
+                "type": "string"
+              },
+              {
+                "id": "67817da8-40b4-4ea8-ab8f-a5c8c7d6cdb1",
+                "name": "norm_content_type",
+                "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? `FB_STORY_${ ($json.raw_json.mediaType || '').toUpperCase() }`\n    : $json.social_network === 'INSTAGRAM'\n    ? `IG_STORY_${ ($json.raw_json.type || '').toUpperCase() }`\n    : 'UNKNOWN_STORY'\n}}\n",
+                "type": "string"
+              },
+              {
+                "id": "7ed43a4b-efe4-4bb9-bd3f-61425ee5d474",
+                "name": "norm_published_dateTime",
+                "value": "={{\n  $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.dateTime\n    : $json.raw_json.created.dateTime\n}}",
+                "type": "string"
+              },
+              {
+                "id": "087bcf15-2a97-46ba-8ed4-f133973271f4",
+                "name": "norm_published_timezone",
+                "value": "={{\n  $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.timezone\n    : $json.raw_json.created.timezone\n}}\n",
+                "type": "string"
+              },
+              {
+                "id": "bc4e3354-4655-493c-b636-1360f18ef815",
+                "name": "norm_text",
+                "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? ''\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.content || ''\n    : ''\n}}",
+                "type": "string"
+              },
+              {
+                "id": "0c0de05c-e9eb-4843-aba3-0faac9478f55",
+                "name": "norm_url",
+                "value": "={{ $json.raw_json.permalink || $json.raw_json.storyUrl || '' }}",
+                "type": "string"
+              },
+              {
+                "id": "7f5812dc-eaa9-49ec-bee9-5927a394ebe3",
+                "name": "norm_picture_url",
+                "value": "={{ $json.raw_json.mediaUrl || $json.raw_json.thumbnailUrl || '' }}",
+                "type": "string"
+              },
+              {
+                "id": "05f3bce7-c990-49e6-a194-99403b3edf7d",
+                "name": "snapshot_date_id",
+                "value": "={{\n  $json.raw_json.code === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.dateTime.toDateTime().format('yyyyMMdd')\n    : $json.raw_json.created.dateTime.toDateTime().format('yyyyMMdd')\n}}",
+                "type": "string"
+              },
+              {
+                "id": "2a48bb77-0bab-4d95-85ca-cc70a6076c66",
+                "name": "norm_raw",
+                "value": "={{ $json }}",
+                "type": "object"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          880,
+          -192
+        ],
+        "id": "da380e8c-81d7-4a80-a54d-6a994219fa32",
+        "name": "Normalize post"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "dim_content",
+            "mode": "list",
+            "cachedResultName": "dim_content"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_ai_generated": false,
+              "external_post_id": "={{ $json.norm_external_post_id }}",
+              "external_account_id": "={{ $json.norm_external_account_id }}",
+              "content_type": "={{ $json.norm_content_type.toUpperCase() }}",
+              "published_at_utc": "={{ $json.norm_published_dateTime }}",
+              "published_timezone": "={{ $json.norm_published_timezone }}",
+              "text": "={{ $json.norm_text }}",
+              "url": "={{ $json.norm_url }}",
+              "picture_url": "={{ $json.norm_picture_url }}",
+              "raw_metadata_json": "={{ $json.norm_raw }}",
+              "brand_id": "={{ $json.norm_brand_id }}",
+              "social_network_id": "={{ $json.norm_raw.raw_json.social_network_db_id }}",
+              "network_post_alt_id": "={{ $json.norm_raw.raw_json.mediaId || null }}"
+            },
+            "matchingColumns": [
+              "social_network_id",
+              "external_post_id"
+            ],
+            "schema": [
+              {
+                "id": "content_id",
+                "displayName": "content_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "social_network_id",
+                "displayName": "social_network_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "external_post_id",
+                "displayName": "external_post_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "network_post_alt_id",
+                "displayName": "network_post_alt_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "external_account_id",
+                "displayName": "external_account_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "content_type",
+                "displayName": "content_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "published_at_utc",
+                "displayName": "published_at_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "published_timezone",
+                "displayName": "published_timezone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "text",
+                "displayName": "text",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "url",
+                "displayName": "url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "picture_url",
+                "displayName": "picture_url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "is_ai_generated",
+                "displayName": "is_ai_generated",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "raw_metadata_json",
+                "displayName": "raw_metadata_json",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1104,
+          -192
+        ],
+        "id": "ef303c1b-9a69-49f4-8d55-039c4e82ac53",
+        "name": "Insert content",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "fact_social_content_metrics",
+            "mode": "list",
+            "cachedResultName": "fact_social_content_metrics"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "content_id": "={{ $json.content_id }}",
+              "social_network_id": "={{ $json.social_network_id }}",
+              "snapshot_date_id": "={{ $json.snapshot_date_id }}",
+              "impressions": "={{\n  Number(\n    $json.raw_metadata_json?.raw_json?.impressionsTotal ??\n    $json.raw_metadata_json?.raw_json?.impressions ??\n    $json.raw_metadata_json?.raw_json?.postImpressionsUnique ??\n    0\n  )\n}}",
+              "likes": "={{ $json.likes }}",
+              "engagement_pct": "={{ $json.engagement_pct }}",
+              "source_endpoint": "={{ $json.source_endpoint }}",
+              "extra_metrics": "={{ $json.extra_metrics }}",
+              "brand_id": "={{ $json.brand_id }}",
+              "stats_from_utc": "={{ $json.stats_from_utc }}",
+              "stats_to_utc": "={{ $json.stats_to_utc }}",
+              "clicks": "={{ $json.clicks }}",
+              "video_views": "={{ $json.videoViews }}",
+              "reach": "={{\n  $json.raw_metadata_json?.raw_json?.reach != null\n    ? Number($json.raw_metadata_json.raw_json.reach)\n    : null\n}}",
+              "video_time_watched_sec": "={{ $json.timeWatched }}",
+              "saves": "={{\n  $json.raw_metadata_json?.raw_json?.saved != null\n    ? Number($json.raw_metadata_json.raw_json.saved)\n    : null\n}}",
+              "comments": "={{\n  $json.raw_metadata_json?.raw_json?.comments != null\n    ? Number($json.raw_metadata_json.raw_json.comments)\n    : null\n}}",
+              "shares": "={{\n  $json.raw_metadata_json?.raw_json?.shares != null\n    ? Number($json.raw_metadata_json.raw_json.shares)\n    : null\n}}",
+              "interactions": "={{ \n  Number($json.raw_metadata_json?.raw_json?.replies ?? 0) +\n  Number($json.raw_metadata_json?.raw_json?.tapsForward ?? 0) +\n  Number($json.raw_metadata_json?.raw_json?.tapsBack ?? 0)\n}}"
+            },
+            "matchingColumns": [
+              "content_id",
+              "snapshot_date_id",
+              "source_endpoint"
+            ],
+            "schema": [
+              {
+                "id": "fact_id",
+                "displayName": "fact_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "content_id",
+                "displayName": "content_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "social_network_id",
+                "displayName": "social_network_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "snapshot_date_id",
+                "displayName": "snapshot_date_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "snapshot_local_date_id",
+                "displayName": "snapshot_local_date_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": true
+              },
+              {
+                "id": "impressions",
+                "displayName": "impressions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "reach",
+                "displayName": "reach",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "interactions",
+                "displayName": "interactions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "likes",
+                "displayName": "likes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "comments",
+                "displayName": "comments",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "shares",
+                "displayName": "shares",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "saves",
+                "displayName": "saves",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "clicks",
+                "displayName": "clicks",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "video_views",
+                "displayName": "video_views",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "video_time_watched_sec",
+                "displayName": "video_time_watched_sec",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false,
+                "removed": false
+              },
+              {
+                "id": "engagement_pct",
+                "displayName": "engagement_pct",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "extra_metrics",
+                "displayName": "extra_metrics",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "source_endpoint",
+                "displayName": "source_endpoint",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "stats_from_utc",
+                "displayName": "stats_from_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "stats_to_utc",
+                "displayName": "stats_to_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "loaded_at_utc",
+                "displayName": "loaded_at_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1552,
+          -192
+        ],
+        "id": "ca333c46-ea06-4273-bae6-4f2986775272",
+        "name": "Insert fact",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "staging_metricool_events",
+            "mode": "list",
+            "cachedResultName": "staging_metricool_events"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "brand_id": "={{$json.db_brand_id }}",
+              "endpoint": "=https://app.metricool.com/api/v2/analytics/stories/{{ $json.code.toLowerCase() }}",
+              "raw_json": "={{ $json }}",
+              "fetched_at_utc": "={{ $now.toISO() }}",
+              "social_network": "={{ $json.code }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "social_network",
+                "displayName": "social_network",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "endpoint",
+                "displayName": "endpoint",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "raw_json",
+                "displayName": "raw_json",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "fetched_at_utc",
+                "displayName": "fetched_at_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          656,
+          -192
+        ],
+        "id": "1018a381-5072-4853-a75b-139a114b0ac1",
+        "name": "Insert into staging",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {}
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -912,
+          -176
+        ],
+        "id": "a9ffe2e9-8556-4e8d-884a-c9d4237878af",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "data",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -16,
+          -288
+        ],
+        "id": "cabda0e4-9ffa-437d-b999-d70a2c81e7bd",
+        "name": "Split Out stories"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3151ba5f-d922-480e-ab96-7f6ff758a5fd",
+                "name": "code",
+                "value": "={{ $json.storyUrl ? 'FACEBOOK' : 'INSTAGRAM' }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          -288
+        ],
+        "id": "7f43ef30-0fdc-4f28-89ae-2c742b73d075",
+        "name": "Tag network"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "code",
+                "field2": "social_network"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          432,
+          -192
+        ],
+        "id": "d0146e89-4a67-4f07-9a40-749c088a1a80",
+        "name": "Data"
+      },
+      {
+        "parameters": {
+          "url": "=https://app.metricool.com/api/v2/analytics/stories/{{ $json.social_network.toLowerCase() }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "from",
+                "value": "={{ $json.date_from }}"
+              },
+              {
+                "name": "to",
+                "value": "={{ $json.date_to }}"
+              },
+              {
+                "name": "timezone",
+                "value": "America/Chicago"
+              },
+              {
+                "name": "blogId",
+                "value": "2539662"
+              },
+              {
+                "name": "userId",
+                "value": "2065617"
+              },
+              {
+                "name": "userToken",
+                "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {}
+            },
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -240,
+          -288
+        ],
+        "id": "88e2ee6c-5a6a-42af-9826-8fee2141784f",
+        "name": "Get stories"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "14076d88-fc3e-4338-bd0f-deb45577a05e",
+                "name": "content_id",
+                "value": "={{ $json.content_id }}",
+                "type": "string"
+              },
+              {
+                "id": "6b51fb2a-c75f-45d5-bf78-4edd6644a0e8",
+                "name": "brand_id",
+                "value": "={{ $json.brand_id }}",
+                "type": "string"
+              },
+              {
+                "id": "d26b2699-5a47-4d29-b15b-cb8c92671ce0",
+                "name": "social_network_id",
+                "value": "={{ $json.social_network_id }}",
+                "type": "string"
+              },
+              {
+                "id": "0c6ee695-446d-422a-9412-499e7ceb7b1c",
+                "name": "snapshot_date_id",
+                "value": "={{ $json.published_at_utc.toDateTime().toUTC().format('yyyyMMdd') }}",
+                "type": "string"
+              },
+              {
+                "id": "8a60f2b4-e8a2-4f59-a9c1-df8108aa454c",
+                "name": "impressions",
+                "value": "={{ $json.raw_metadata_json.raw_json.impressions || 0 }}",
+                "type": "string"
+              },
+              {
+                "id": "3fce0918-4e9f-4f20-8ae2-0c6821b6965e",
+                "name": "likes",
+                "value": "={{ $json.raw_metadata_json.raw_json.likes || 0 }}",
+                "type": "string"
+              },
+              {
+                "id": "5ce0c9a6-eb36-4d21-8d08-a8236c9c9187",
+                "name": "comments",
+                "value": "={{ $json.raw_metadata_json.raw_json.comments || 0 }}",
+                "type": "string"
+              },
+              {
+                "id": "872c5283-a1fa-42ad-9e88-4ce0d79216a9",
+                "name": "engagement_pct",
+                "value": "={{ $json.raw_metadata_json.raw_json.engagement || null }}",
+                "type": "string"
+              },
+              {
+                "id": "8e5d9b50-ff92-4037-926a-fe26b6044cf5",
+                "name": "extra_metrics",
+                "value": "={{ $json.raw_metadata_json.raw_json }}",
+                "type": "object"
+              },
+              {
+                "id": "4faeda64-7673-4e4c-a13f-db58655552eb",
+                "name": "source_endpoint",
+                "value": "={{ $json.raw_metadata_json.endpoint }}",
+                "type": "string"
+              },
+              {
+                "id": "bef0ec6a-54a3-41f2-9005-707b50f1a446",
+                "name": "stats_from_utc",
+                "value": "={{ $json.published_at_utc }}",
+                "type": "string"
+              },
+              {
+                "id": "a1f214ff-6d51-435d-a69a-dcb2ead27ba9",
+                "name": "stats_to_utc",
+                "value": "={{ $json.published_at_utc }}",
+                "type": "string"
+              },
+              {
+                "id": "744dccc8-0577-431c-b153-6f98bf938e32",
+                "name": "videoViews",
+                "value": "={{ $json.raw_metadata_json.raw_json.videoViews || null }}",
+                "type": "string"
+              },
+              {
+                "id": "e53d23ba-6aff-43a0-a994-194a2735c628",
+                "name": "viewers",
+                "value": "={{ $json.raw_metadata_json.raw_json.viewers || $json.raw_metadata_json.raw_json.reach || null }}",
+                "type": "string"
+              },
+              {
+                "id": "ebf4bf21-da42-4f70-b477-a4a8351a5c69",
+                "name": "timeWatched",
+                "value": "={{ $json.raw_metadata_json.raw_json.timeWatched || null }}",
+                "type": "string"
+              },
+              {
+                "id": "bf5f20ec-d7d7-422e-82fe-9c690a1a97fe",
+                "name": "clicks",
+                "value": "={{ $json.raw_metadata_json.raw_json.clicks || null }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1328,
+          -192
+        ],
+        "id": "a34d6796-844b-42b4-86f0-29a3c22c47ab",
+        "name": "Set facts data"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5d15287b-1e68-441c-bad2-c1733019f4b2",
+                "name": "social_networks",
+                "value": "[\"FACEBOOK\",\"INSTAGRAM\"]",
+                "type": "array"
+              },
+              {
+                "id": "f1043433-b7c0-433c-9447-42ee52cb5765",
+                "name": "brandId",
+                "value": "2539662",
+                "type": "string"
+              },
+              {
+                "id": "74645608-64bb-4cd2-88a4-d2e0ce95db98",
+                "name": "date_from",
+                "value": "={{ $now.minus(7, 'days').format(\"yyyy-MM-dd'T'HH:mm:ss\") }}",
+                "type": "string"
+              },
+              {
+                "id": "adfebb11-d222-4111-b6e5-6041a58317b8",
+                "name": "date_to",
+                "value": "={{ $now.format(\"yyyy-MM-dd'T'HH:mm:ss\") }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -688,
+          -176
+        ],
+        "id": "f2e0c2b0-6d82-4774-ba37-ae9a73795e6c",
+        "name": "Settings"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "l4SvHrqFqn3Mw204",
+            "mode": "list",
+            "cachedResultName": "dwh_get_socials_metadata"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "social_networks": "={{ $json.social_networks }}",
+              "brand_id": "={{ $json.brandId }}",
+              "date_from": "={{ $json.date_from }}",
+              "date_to": "={{ $json.date_to }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "social_networks",
+                "displayName": "social_networks",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "date_from",
+                "displayName": "date_from",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "date_to",
+                "displayName": "date_to",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          -464,
+          -176
+        ],
+        "id": "ef022d87-e410-4155-8926-6cfef0302980",
+        "name": "Get socials metadata",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      }
+    ],
+    "connections": {
+      "Normalize post": {
+        "main": [
+          [
+            {
+              "node": "Insert content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert content": {
+        "main": [
+          [
+            {
+              "node": "Set facts data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert into staging": {
+        "main": [
+          [
+            {
+              "node": "Normalize post",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Settings",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out stories": {
+        "main": [
+          [
+            {
+              "node": "Tag network",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tag network": {
+        "main": [
+          [
+            {
+              "node": "Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data": {
+        "main": [
+          [
+            {
+              "node": "Insert into staging",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get stories": {
+        "main": [
+          [
+            {
+              "node": "Split Out stories",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set facts data": {
+        "main": [
+          [
+            {
+              "node": "Insert fact",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Settings": {
+        "main": [
+          [
+            {
+              "node": "Get socials metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get socials metadata": {
+        "main": [
+          [
+            {
+              "node": "Get stories",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Data",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Javier Guerra",
+    "name": "Version bf11c25f",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "bf11c25f-e6d9-4339-b055-0e92037f8abb",
+  "basePath": "workflows",
+  "connections": {
+    "Normalize post": {
+      "main": [
+        [
+          {
+            "node": "Insert content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert content": {
+      "main": [
+        [
+          {
+            "node": "Set facts data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert into staging": {
+      "main": [
+        [
+          {
+            "node": "Normalize post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out stories": {
+      "main": [
+        [
+          {
+            "node": "Tag network",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag network": {
+      "main": [
+        [
+          {
+            "node": "Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data": {
+      "main": [
+        [
+          {
+            "node": "Insert into staging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get stories": {
+      "main": [
+        [
+          {
+            "node": "Split Out stories",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set facts data": {
+      "main": [
+        [
+          {
+            "node": "Insert fact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Get socials metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get socials metadata": {
+      "main": [
+        [
+          {
+            "node": "Get stories",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-03T18:34:25.084Z",
+  "id": "7GJEGURpnHFxsL0U",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "dws_stories_ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a5687a0e-819b-4495-9f01-2b79db377a68",
+              "name": "norm_brand_id",
+              "value": "={{ $json.raw_json.db_brand_id }}",
+              "type": "string"
+            },
+            {
+              "id": "801bb5ba-61b0-4d11-b360-5c90ea97309e",
+              "name": "norm_social_network",
+              "value": "={{ $json.raw_json.code }}",
+              "type": "string"
+            },
+            {
+              "id": "6e632d4e-0de2-4fa1-943a-5be04bc3c2a8",
+              "name": "norm_external_post_id",
+              "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? $json.raw_json.storyId\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.postId\n    : ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "c32605bc-02bc-4235-9869-ad275f4693ce",
+              "name": "norm_external_account_id",
+              "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? $json.raw_json.pageId\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.businessId\n    : ''\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "67817da8-40b4-4ea8-ab8f-a5c8c7d6cdb1",
+              "name": "norm_content_type",
+              "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? `FB_STORY_${ ($json.raw_json.mediaType || '').toUpperCase() }`\n    : $json.social_network === 'INSTAGRAM'\n    ? `IG_STORY_${ ($json.raw_json.type || '').toUpperCase() }`\n    : 'UNKNOWN_STORY'\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "7ed43a4b-efe4-4bb9-bd3f-61425ee5d474",
+              "name": "norm_published_dateTime",
+              "value": "={{\n  $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.dateTime\n    : $json.raw_json.created.dateTime\n}}",
+              "type": "string"
+            },
+            {
+              "id": "087bcf15-2a97-46ba-8ed4-f133973271f4",
+              "name": "norm_published_timezone",
+              "value": "={{\n  $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.timezone\n    : $json.raw_json.created.timezone\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "bc4e3354-4655-493c-b636-1360f18ef815",
+              "name": "norm_text",
+              "value": "={{ \n  $json.social_network === 'FACEBOOK'\n    ? ''\n    : $json.social_network === 'INSTAGRAM'\n    ? $json.raw_json.content || ''\n    : ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "0c0de05c-e9eb-4843-aba3-0faac9478f55",
+              "name": "norm_url",
+              "value": "={{ $json.raw_json.permalink || $json.raw_json.storyUrl || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "7f5812dc-eaa9-49ec-bee9-5927a394ebe3",
+              "name": "norm_picture_url",
+              "value": "={{ $json.raw_json.mediaUrl || $json.raw_json.thumbnailUrl || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "05f3bce7-c990-49e6-a194-99403b3edf7d",
+              "name": "snapshot_date_id",
+              "value": "={{\n  $json.raw_json.code === 'INSTAGRAM'\n    ? $json.raw_json.publishedAt.dateTime.toDateTime().format('yyyyMMdd')\n    : $json.raw_json.created.dateTime.toDateTime().format('yyyyMMdd')\n}}",
+              "type": "string"
+            },
+            {
+              "id": "2a48bb77-0bab-4d95-85ca-cc70a6076c66",
+              "name": "norm_raw",
+              "value": "={{ $json }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -192
+      ],
+      "id": "da380e8c-81d7-4a80-a54d-6a994219fa32",
+      "name": "Normalize post"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "dim_content",
+          "mode": "list",
+          "cachedResultName": "dim_content"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_ai_generated": false,
+            "external_post_id": "={{ $json.norm_external_post_id }}",
+            "external_account_id": "={{ $json.norm_external_account_id }}",
+            "content_type": "={{ $json.norm_content_type.toUpperCase() }}",
+            "published_at_utc": "={{ $json.norm_published_dateTime }}",
+            "published_timezone": "={{ $json.norm_published_timezone }}",
+            "text": "={{ $json.norm_text }}",
+            "url": "={{ $json.norm_url }}",
+            "picture_url": "={{ $json.norm_picture_url }}",
+            "raw_metadata_json": "={{ $json.norm_raw }}",
+            "brand_id": "={{ $json.norm_brand_id }}",
+            "social_network_id": "={{ $json.norm_raw.raw_json.social_network_db_id }}",
+            "network_post_alt_id": "={{ $json.norm_raw.raw_json.mediaId || null }}"
+          },
+          "matchingColumns": [
+            "social_network_id",
+            "external_post_id"
+          ],
+          "schema": [
+            {
+              "id": "content_id",
+              "displayName": "content_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "social_network_id",
+              "displayName": "social_network_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "external_post_id",
+              "displayName": "external_post_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "network_post_alt_id",
+              "displayName": "network_post_alt_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "external_account_id",
+              "displayName": "external_account_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "content_type",
+              "displayName": "content_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "published_at_utc",
+              "displayName": "published_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "published_timezone",
+              "displayName": "published_timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "picture_url",
+              "displayName": "picture_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "is_ai_generated",
+              "displayName": "is_ai_generated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "raw_metadata_json",
+              "displayName": "raw_metadata_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1104,
+        -192
+      ],
+      "id": "ef303c1b-9a69-49f4-8d55-039c4e82ac53",
+      "name": "Insert content",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "fact_social_content_metrics",
+          "mode": "list",
+          "cachedResultName": "fact_social_content_metrics"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content_id": "={{ $json.content_id }}",
+            "social_network_id": "={{ $json.social_network_id }}",
+            "snapshot_date_id": "={{ $json.snapshot_date_id }}",
+            "impressions": "={{\n  Number(\n    $json.raw_metadata_json?.raw_json?.impressionsTotal ??\n    $json.raw_metadata_json?.raw_json?.impressions ??\n    $json.raw_metadata_json?.raw_json?.postImpressionsUnique ??\n    0\n  )\n}}",
+            "likes": "={{ $json.likes }}",
+            "engagement_pct": "={{ $json.engagement_pct }}",
+            "source_endpoint": "={{ $json.source_endpoint }}",
+            "extra_metrics": "={{ $json.extra_metrics }}",
+            "brand_id": "={{ $json.brand_id }}",
+            "stats_from_utc": "={{ $json.stats_from_utc }}",
+            "stats_to_utc": "={{ $json.stats_to_utc }}",
+            "clicks": "={{ $json.clicks }}",
+            "video_views": "={{ $json.videoViews }}",
+            "reach": "={{\n  $json.raw_metadata_json?.raw_json?.reach != null\n    ? Number($json.raw_metadata_json.raw_json.reach)\n    : null\n}}",
+            "video_time_watched_sec": "={{ $json.timeWatched }}",
+            "saves": "={{\n  $json.raw_metadata_json?.raw_json?.saved != null\n    ? Number($json.raw_metadata_json.raw_json.saved)\n    : null\n}}",
+            "comments": "={{\n  $json.raw_metadata_json?.raw_json?.comments != null\n    ? Number($json.raw_metadata_json.raw_json.comments)\n    : null\n}}",
+            "shares": "={{\n  $json.raw_metadata_json?.raw_json?.shares != null\n    ? Number($json.raw_metadata_json.raw_json.shares)\n    : null\n}}",
+            "interactions": "={{ \n  Number($json.raw_metadata_json?.raw_json?.replies ?? 0) +\n  Number($json.raw_metadata_json?.raw_json?.tapsForward ?? 0) +\n  Number($json.raw_metadata_json?.raw_json?.tapsBack ?? 0)\n}}"
+          },
+          "matchingColumns": [
+            "content_id",
+            "snapshot_date_id",
+            "source_endpoint"
+          ],
+          "schema": [
+            {
+              "id": "fact_id",
+              "displayName": "fact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content_id",
+              "displayName": "content_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "social_network_id",
+              "displayName": "social_network_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "snapshot_date_id",
+              "displayName": "snapshot_date_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "snapshot_local_date_id",
+              "displayName": "snapshot_local_date_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "impressions",
+              "displayName": "impressions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "reach",
+              "displayName": "reach",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "interactions",
+              "displayName": "interactions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "likes",
+              "displayName": "likes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "comments",
+              "displayName": "comments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "shares",
+              "displayName": "shares",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "saves",
+              "displayName": "saves",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "clicks",
+              "displayName": "clicks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "video_views",
+              "displayName": "video_views",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "video_time_watched_sec",
+              "displayName": "video_time_watched_sec",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "engagement_pct",
+              "displayName": "engagement_pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "extra_metrics",
+              "displayName": "extra_metrics",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "source_endpoint",
+              "displayName": "source_endpoint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "stats_from_utc",
+              "displayName": "stats_from_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "stats_to_utc",
+              "displayName": "stats_to_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "loaded_at_utc",
+              "displayName": "loaded_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1552,
+        -192
+      ],
+      "id": "ca333c46-ea06-4273-bae6-4f2986775272",
+      "name": "Insert fact",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "staging_metricool_events",
+          "mode": "list",
+          "cachedResultName": "staging_metricool_events"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "brand_id": "={{$json.db_brand_id }}",
+            "endpoint": "=https://app.metricool.com/api/v2/analytics/stories/{{ $json.code.toLowerCase() }}",
+            "raw_json": "={{ $json }}",
+            "fetched_at_utc": "={{ $now.toISO() }}",
+            "social_network": "={{ $json.code }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "social_network",
+              "displayName": "social_network",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "endpoint",
+              "displayName": "endpoint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_json",
+              "displayName": "raw_json",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fetched_at_utc",
+              "displayName": "fetched_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        656,
+        -192
+      ],
+      "id": "1018a381-5072-4853-a75b-139a114b0ac1",
+      "name": "Insert into staging",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -912,
+        -176
+      ],
+      "id": "a9ffe2e9-8556-4e8d-884a-c9d4237878af",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -288
+      ],
+      "id": "cabda0e4-9ffa-437d-b999-d70a2c81e7bd",
+      "name": "Split Out stories"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3151ba5f-d922-480e-ab96-7f6ff758a5fd",
+              "name": "code",
+              "value": "={{ $json.storyUrl ? 'FACEBOOK' : 'INSTAGRAM' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -288
+      ],
+      "id": "7f43ef30-0fdc-4f28-89ae-2c742b73d075",
+      "name": "Tag network"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "code",
+              "field2": "social_network"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        432,
+        -192
+      ],
+      "id": "d0146e89-4a67-4f07-9a40-749c088a1a80",
+      "name": "Data"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.metricool.com/api/v2/analytics/stories/{{ $json.social_network.toLowerCase() }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $json.date_from }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $json.date_to }}"
+            },
+            {
+              "name": "timezone",
+              "value": "America/Chicago"
+            },
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -288
+      ],
+      "id": "88e2ee6c-5a6a-42af-9826-8fee2141784f",
+      "name": "Get stories"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14076d88-fc3e-4338-bd0f-deb45577a05e",
+              "name": "content_id",
+              "value": "={{ $json.content_id }}",
+              "type": "string"
+            },
+            {
+              "id": "6b51fb2a-c75f-45d5-bf78-4edd6644a0e8",
+              "name": "brand_id",
+              "value": "={{ $json.brand_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d26b2699-5a47-4d29-b15b-cb8c92671ce0",
+              "name": "social_network_id",
+              "value": "={{ $json.social_network_id }}",
+              "type": "string"
+            },
+            {
+              "id": "0c6ee695-446d-422a-9412-499e7ceb7b1c",
+              "name": "snapshot_date_id",
+              "value": "={{ $json.published_at_utc.toDateTime().toUTC().format('yyyyMMdd') }}",
+              "type": "string"
+            },
+            {
+              "id": "8a60f2b4-e8a2-4f59-a9c1-df8108aa454c",
+              "name": "impressions",
+              "value": "={{ $json.raw_metadata_json.raw_json.impressions || 0 }}",
+              "type": "string"
+            },
+            {
+              "id": "3fce0918-4e9f-4f20-8ae2-0c6821b6965e",
+              "name": "likes",
+              "value": "={{ $json.raw_metadata_json.raw_json.likes || 0 }}",
+              "type": "string"
+            },
+            {
+              "id": "5ce0c9a6-eb36-4d21-8d08-a8236c9c9187",
+              "name": "comments",
+              "value": "={{ $json.raw_metadata_json.raw_json.comments || 0 }}",
+              "type": "string"
+            },
+            {
+              "id": "872c5283-a1fa-42ad-9e88-4ce0d79216a9",
+              "name": "engagement_pct",
+              "value": "={{ $json.raw_metadata_json.raw_json.engagement || null }}",
+              "type": "string"
+            },
+            {
+              "id": "8e5d9b50-ff92-4037-926a-fe26b6044cf5",
+              "name": "extra_metrics",
+              "value": "={{ $json.raw_metadata_json.raw_json }}",
+              "type": "object"
+            },
+            {
+              "id": "4faeda64-7673-4e4c-a13f-db58655552eb",
+              "name": "source_endpoint",
+              "value": "={{ $json.raw_metadata_json.endpoint }}",
+              "type": "string"
+            },
+            {
+              "id": "bef0ec6a-54a3-41f2-9005-707b50f1a446",
+              "name": "stats_from_utc",
+              "value": "={{ $json.published_at_utc }}",
+              "type": "string"
+            },
+            {
+              "id": "a1f214ff-6d51-435d-a69a-dcb2ead27ba9",
+              "name": "stats_to_utc",
+              "value": "={{ $json.published_at_utc }}",
+              "type": "string"
+            },
+            {
+              "id": "744dccc8-0577-431c-b153-6f98bf938e32",
+              "name": "videoViews",
+              "value": "={{ $json.raw_metadata_json.raw_json.videoViews || null }}",
+              "type": "string"
+            },
+            {
+              "id": "e53d23ba-6aff-43a0-a994-194a2735c628",
+              "name": "viewers",
+              "value": "={{ $json.raw_metadata_json.raw_json.viewers || $json.raw_metadata_json.raw_json.reach || null }}",
+              "type": "string"
+            },
+            {
+              "id": "ebf4bf21-da42-4f70-b477-a4a8351a5c69",
+              "name": "timeWatched",
+              "value": "={{ $json.raw_metadata_json.raw_json.timeWatched || null }}",
+              "type": "string"
+            },
+            {
+              "id": "bf5f20ec-d7d7-422e-82fe-9c690a1a97fe",
+              "name": "clicks",
+              "value": "={{ $json.raw_metadata_json.raw_json.clicks || null }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1328,
+        -192
+      ],
+      "id": "a34d6796-844b-42b4-86f0-29a3c22c47ab",
+      "name": "Set facts data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d15287b-1e68-441c-bad2-c1733019f4b2",
+              "name": "social_networks",
+              "value": "[\"FACEBOOK\",\"INSTAGRAM\"]",
+              "type": "array"
+            },
+            {
+              "id": "f1043433-b7c0-433c-9447-42ee52cb5765",
+              "name": "brandId",
+              "value": "2539662",
+              "type": "string"
+            },
+            {
+              "id": "74645608-64bb-4cd2-88a4-d2e0ce95db98",
+              "name": "date_from",
+              "value": "={{ $now.minus(7, 'days').format(\"yyyy-MM-dd'T'HH:mm:ss\") }}",
+              "type": "string"
+            },
+            {
+              "id": "adfebb11-d222-4111-b6e5-6041a58317b8",
+              "name": "date_to",
+              "value": "={{ $now.format(\"yyyy-MM-dd'T'HH:mm:ss\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -688,
+        -176
+      ],
+      "id": "f2e0c2b0-6d82-4774-ba37-ae9a73795e6c",
+      "name": "Settings"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "l4SvHrqFqn3Mw204",
+          "mode": "list",
+          "cachedResultName": "dwh_get_socials_metadata"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "social_networks": "={{ $json.social_networks }}",
+            "brand_id": "={{ $json.brandId }}",
+            "date_from": "={{ $json.date_from }}",
+            "date_to": "={{ $json.date_to }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "social_networks",
+              "displayName": "social_networks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "date_from",
+              "displayName": "date_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "date_to",
+              "displayName": "date_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        -176
+      ],
+      "id": "ef022d87-e410-4155-8926-6cfef0302980",
+      "name": "Get socials metadata",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-03T18:34:25.084Z",
+      "createdAt": "2025-12-03T18:34:25.084Z",
+      "role": "workflow:owner",
+      "workflowId": "7GJEGURpnHFxsL0U",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-06T17:41:42.074Z",
+  "versionId": "bf11c25f-e6d9-4339-b055-0e92037f8abb"
+}
