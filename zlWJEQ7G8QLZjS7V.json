@@ -1,0 +1,79 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-11-19T21:34:41.143Z",
+  "id": "zlWJEQ7G8QLZjS7V",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "test",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a29503b7-5e0a-4485-a099-3d9806c72bce",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const text = \"En el mundo actual, la creación de contenido se mueve más rápido que nunca. Las herramientas digitales nos permiten producir ideas, mensajes y diseños con una velocidad increíble⁠ Pero más allá de la tecnología, lo realmente importante sigue siendo el propósito: comunicar con claridad, aportar valor y conectar con las personas⁠ La clave no está solo en crear más, sino en crear mejor: entendiendo a la audiencia, midiendo el impacto y ajustando continuamente la estrategia⁠ La innovación es una herramienta; el criterio, una ventaja⁠\" || \"\"; // lo que devuelve la IA\n  const MARK = \"\\u2060\";\n\n  item.json.cleaned_text = text;\n  item.json.has_hidden_char = text.includes(MARK);\n\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        0
+      ],
+      "id": "6e669a08-923a-4186-8965-3fc9075edc13",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-19T21:34:41.143Z",
+      "createdAt": "2025-11-19T21:34:41.143Z",
+      "role": "workflow:owner",
+      "workflowId": "zlWJEQ7G8QLZjS7V",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-04T16:03:28.185Z",
+  "versionId": "322f2239-a9ba-4dbf-8285-e2e20732c308"
+}
