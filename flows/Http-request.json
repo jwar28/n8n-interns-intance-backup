@@ -1,0 +1,169 @@
+{
+  "updatedAt": "2026-02-06T17:56:37.738Z",
+  "createdAt": "2026-01-13T23:17:30.291Z",
+  "id": "bFkavI32MrFu5H6va6Jf4",
+  "name": "Http-request",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "506ed4af-183a-4fff-b7da-6130bd453f46",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dea2c0b6-839f-48d9-affe-11c71b5bf086",
+              "name": "limit",
+              "value": "5",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        240
+      ],
+      "id": "c72f7fab-5333-4277-a545-8c4c4c2a1b0c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://icanhazdadjoke.com",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "02eb8839-f211-4846-944c-7f8393ea9320",
+      "name": "Dad joke"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        240
+      ],
+      "id": "fd757650-e853-4e66-98ba-c4aab7074979",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "url": "https://dragonball-api.com/api/characters",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "={{$json.limit}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        240
+      ],
+      "id": "b9a59c7c-4c2d-4f59-af70-5561d099099f",
+      "name": "DB Characters"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Dad joke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "DB Characters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DB Characters": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "fbd20ca4-d89a-4518-8502-8fe9f9c321f5",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-13T23:17:30.291Z",
+      "createdAt": "2026-01-13T23:17:30.291Z",
+      "role": "workflow:owner",
+      "workflowId": "bFkavI32MrFu5H6va6Jf4",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
