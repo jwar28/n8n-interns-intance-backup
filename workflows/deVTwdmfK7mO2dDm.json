@@ -1,0 +1,201 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-06T20:25:59.102Z",
+    "createdAt": "2026-01-06T20:25:59.102Z",
+    "versionId": "64d8308f-a305-4db0-b4f4-46b017727f75",
+    "workflowId": "deVTwdmfK7mO2dDm",
+    "nodes": [
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "brandId"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "ffe1f7a6-7c94-4030-8704-51bb0cd71d76",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "dim_brand",
+            "mode": "list",
+            "cachedResultName": "dim_brand"
+          },
+          "where": {
+            "values": [
+              {
+                "column": "metricool_brand_id",
+                "value": "={{ $json.brandId }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          240,
+          0
+        ],
+        "id": "471e2f6b-c067-4bcf-b260-45f8a76baba9",
+        "name": "get db brand id",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "get db brand id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "64d8308f-a305-4db0-b4f4-46b017727f75",
+  "basePath": "workflows",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "get db brand id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-03T18:38:14.832Z",
+  "id": "deVTwdmfK7mO2dDm",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "dwh_sw_get_db_brand_id",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "brandId"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ffe1f7a6-7c94-4030-8704-51bb0cd71d76",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "dim_brand",
+          "mode": "list",
+          "cachedResultName": "dim_brand"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "metricool_brand_id",
+              "value": "={{ $json.brandId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        240,
+        0
+      ],
+      "id": "471e2f6b-c067-4bcf-b260-45f8a76baba9",
+      "name": "get db brand id",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "brandId": 2539662
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-03T18:38:14.832Z",
+      "createdAt": "2025-12-03T18:38:14.832Z",
+      "role": "workflow:owner",
+      "workflowId": "deVTwdmfK7mO2dDm",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-04T19:02:45.713Z",
+  "versionId": "64d8308f-a305-4db0-b4f4-46b017727f75"
+}
