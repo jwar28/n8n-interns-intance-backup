@@ -1544,7 +1544,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "position": [
         1152,
-        1776
+        1728
       ],
       "typeVersion": 1
     },
@@ -1753,7 +1753,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "position": [
         2480,
-        1888
+        1840
       ],
       "typeVersion": 3
     },
@@ -1772,7 +1772,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "position": [
         1152,
-        1984
+        1952
       ],
       "typeVersion": 1.2
     },
@@ -1864,7 +1864,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "position": [
         2704,
-        1888
+        1856
       ],
       "typeVersion": 1.2
     },
@@ -1893,7 +1893,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         1376,
-        1888
+        1840
       ],
       "typeVersion": 3.4
     },
@@ -1916,8 +1916,8 @@
       "name": "List files",
       "type": "n8n-nodes-base.github",
       "position": [
-        2032,
-        1984
+        2048,
+        2000
       ],
       "webhookId": "244ea8da-851f-4afb-980c-5e5973b6a1af",
       "executeOnce": true,
@@ -2007,7 +2007,7 @@
       "type": "n8n-nodes-base.n8n",
       "position": [
         1600,
-        1888
+        1840
       ],
       "typeVersion": 1,
       "credentials": {
@@ -2027,7 +2027,7 @@
       "type": "n8n-nodes-base.aggregate",
       "position": [
         1824,
-        1984
+        2000
       ],
       "typeVersion": 1
     },
@@ -2245,7 +2245,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         2256,
-        1776
+        1840
       ],
       "typeVersion": 3.4
     },
@@ -2287,25 +2287,9 @@
       "type": "n8n-nodes-base.set",
       "position": [
         2256,
-        1984
+        2000
       ],
       "typeVersion": 3.4
-    },
-    {
-      "parameters": {
-        "content": "## Edit this node 👇",
-        "height": 80,
-        "width": 150,
-        "color": 4
-      },
-      "id": "18264904-c0ed-40e6-bf49-3a6e694a453f",
-      "name": "Sticky Note3",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1360,
-        1744
-      ],
-      "typeVersion": 1
     },
     {
       "parameters": {
@@ -2367,6 +2351,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-02-11T06:09:52.433Z",
-  "versionId": "07efce5e-c6e2-410f-9aeb-853beabfea3e"
+  "updatedAt": "2026-02-11T06:14:50.009Z",
+  "versionId": "b03e133b-0a76-4ca6-80bf-7b10988f4f20"
 }
