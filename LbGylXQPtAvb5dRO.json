@@ -1,0 +1,117 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Dad Joke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Dad Joke": {
+      "main": [
+        [
+          {
+            "node": "Respond with Joke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-28T01:10:55.223Z",
+  "id": "LbGylXQPtAvb5dRO",
+  "isArchived": true,
+  "meta": null,
+  "name": "Dad Joke Webhook (auto)",
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "dadjoke",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "httpRequest",
+      "name": "Get Dad Joke",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://icanhazdadjoke.com/",
+        "headers": [
+          {
+            "name": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "options": {
+          "timeout": 8000
+        }
+      }
+    },
+    {
+      "id": "respond",
+      "name": "Respond with Joke",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        700,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, joke: $json[\"body\"]?.joke || $json[\"joke\"] || $json[\"data\"]?.joke } }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": null,
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionTimeout": 60,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-28T01:10:55.223Z",
+      "createdAt": "2026-01-28T01:10:55.223Z",
+      "role": "workflow:owner",
+      "workflowId": "LbGylXQPtAvb5dRO",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-06T13:43:26.002Z",
+  "versionId": "b0e4f1bb-e867-41d5-9071-2a8c1378ee10"
+}
