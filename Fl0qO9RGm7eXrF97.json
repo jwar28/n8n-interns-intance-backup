@@ -1,0 +1,108 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-27T18:15:42.936Z",
+  "id": "Fl0qO9RGm7eXrF97",
+  "isArchived": true,
+  "meta": null,
+  "name": "TEST - smoke (manual -> set -> code)",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        300
+      ],
+      "id": "a790fc4f-a003-4cd6-96e9-729bdc0fddc2"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ping",
+              "value": "pong"
+            },
+            {
+              "name": "env",
+              "value": "clawdbot"
+            }
+          ]
+        }
+      },
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ],
+      "id": "10b3fdc3-83b6-4fcf-9503-78d09439bd1d"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(i => ({ json: { ...i.json, now: new Date().toISOString() } }));"
+      },
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ],
+      "id": "4b970d69-a7a9-4859-9a9b-aa4b7fc0bd22"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": null,
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-27T18:15:42.936Z",
+      "createdAt": "2026-01-27T18:15:42.936Z",
+      "role": "workflow:owner",
+      "workflowId": "Fl0qO9RGm7eXrF97",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-06T13:43:28.756Z",
+  "versionId": "6bcbd025-73b4-4c51-9663-ce0379e2cf88"
+}
