@@ -715,7 +715,8 @@
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Globals').item.json.repo.name }}"
-        }
+        },
+        "filePath": "={{ $('Globals').item.json.basePath }}"
       },
       "id": "7d0450a7-5f79-42e3-b651-bdd9a760040c",
       "name": "List files",
@@ -763,7 +764,7 @@
       "type": "n8n-nodes-base.if",
       "position": [
         2928,
-        2080
+        2048
       ],
       "typeVersion": 2.2
     },
@@ -964,6 +965,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-02-11T16:48:55.803Z",
-  "versionId": "afd33f2f-ee05-4ba0-b4f5-e6577dc0fa0c"
+  "updatedAt": "2026-02-11T16:54:02.520Z",
+  "versionId": "91d2729b-996e-47cc-9113-76b9a897d309"
 }
