@@ -1,0 +1,1040 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-06T17:41:13.526Z",
+    "createdAt": "2026-02-06T17:41:11.351Z",
+    "versionId": "4b2eb122-9459-4800-b469-ff4cd5d2f9b4",
+    "workflowId": "MKJxNKpvtZGZghnJ",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "=https://app.metricool.com/api/stats/timeline/{{ $json.metric_list }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "start",
+                "value": "={{ $json.from }}"
+              },
+              {
+                "name": "end",
+                "value": "={{ $json.to }}"
+              },
+              {
+                "name": "blogId",
+                "value": "2539662"
+              },
+              {
+                "name": "userId",
+                "value": "2065617"
+              },
+              {
+                "name": "userToken",
+                "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Cookie",
+                "value": "AWSALB=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT; AWSALBCORS=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT"
+              },
+              {
+                "name": "cookie",
+                "value": "AWSALB=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT;AWSALBCORS=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT;"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {}
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          688,
+          96
+        ],
+        "id": "a9ad6005-d774-47ba-9437-9d69fef306bb",
+        "name": "Get page metrics"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "0d3ca5a5-5e6b-4255-90d5-d650c444f457",
+                "name": "metric_list",
+                "value": "[\"Visitors\", \"PageViews\"]",
+                "type": "array"
+              },
+              {
+                "id": "95c82b91-39a0-4258-91b3-ba2bbb1b97b5",
+                "name": "from",
+                "value": "={{ $now.minus(2, 'days').format('yyyyMMdd') }}",
+                "type": "string"
+              },
+              {
+                "id": "4ed374a1-5efb-4315-9b4c-671acb5c71ef",
+                "name": "to",
+                "value": "={{ $now.format('yyyyMMdd') }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          240,
+          96
+        ],
+        "id": "68dc3449-2e6c-431a-b592-42f4955bd88e",
+        "name": "Settings"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "metric_list",
+          "include": "allOtherFields",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          464,
+          96
+        ],
+        "id": "fb5bdfed-c97d-4500-9e82-1efd4c45626b",
+        "name": "Split metrics"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d6cf9a76-ec9c-4ec5-b848-a0a5daeb693b",
+                "name": "brand_id",
+                "value": 1,
+                "type": "number"
+              },
+              {
+                "id": "cf085c3f-c448-4bda-b533-bd0744eec109",
+                "name": "snapshot_date_id",
+                "value": "={{ \n  (() => {\n    const v = $json[\"0\"];\n    if (v === null || v === undefined || v === '') return null;\n\n    const s = String(v).trim();\n    const digits = s.replace(/\\D/g, '');\n    if (!digits) return null;\n\n    // Epoch en ms (13) o s (10)\n    if (digits.length === 13 || digits.length === 10) {\n      const ms = digits.length === 10 ? Number(digits) * 1000 : Number(digits);\n      const dt = new Date(ms);\n      const y = dt.getUTCFullYear();\n      const m = String(dt.getUTCMonth() + 1).padStart(2, '0');\n      const d = String(dt.getUTCDate()).padStart(2, '0');\n      return Number(`${y}${m}${d}`);\n    }\n\n    // Si ya viene yyyyMMdd\n    if (digits.length === 8) return Number(digits);\n\n    return null;\n  })()\n}}\n",
+                "type": "string"
+              },
+              {
+                "id": "8cd3f42e-5120-4247-b1c5-71830cef7ef3",
+                "name": "metric_code",
+                "value": "={{ $('Split metrics').item.json.metric_list }}",
+                "type": "string"
+              },
+              {
+                "id": "fa52aaee-3d57-4dd3-b494-811fc02185e3",
+                "name": "value",
+                "value": "={{ $json['1'] }}",
+                "type": "number"
+              },
+              {
+                "id": "2ab68e84-524b-4152-b77a-a60f4af22563",
+                "name": "source_endpoint",
+                "value": "=/stats/timeline/{{ $('Split metrics').item.json.metric_list }}",
+                "type": "string"
+              },
+              {
+                "id": "bf6a2e8b-134c-4746-befa-3e22eddbe03f",
+                "name": "date_utc",
+                "value": "={{\n  (() => {\n    const v = $json[\"0\"];\n    if (v === null || v === undefined || v === '') return null;\n\n    // 1) Si viene como número (o string numérico) tipo epoch\n    const s = String(v).trim();\n\n    // ISO date: 2024-10-01 o 2024-10-01T...\n    const iso = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n    if (iso) {\n      const [, y, m, d] = iso;\n      return `${y}-${m}-${d}T00:00:00.000Z`;\n    }\n\n    // Solo dígitos\n    const digits = s.replace(/\\D/g, '');\n    if (!digits) return null;\n\n    // Epoch seconds (10) o ms (13)\n    if (digits.length === 10 || digits.length === 13) {\n      const ms = digits.length === 10 ? Number(digits) * 1000 : Number(digits);\n      const dt = new Date(ms);\n      if (isNaN(dt.getTime())) return null;\n      return dt.toISOString().slice(0, 10) + \"T00:00:00.000Z\";\n    }\n\n    // Date id yyyyMMdd / variantes\n    let year, month, day;\n\n    if (digits.length === 8) {\n      year = digits.slice(0, 4);\n      month = digits.slice(4, 6);\n      day = digits.slice(6, 8);\n    } else if (digits.length === 7) {\n      year = digits.slice(0, 4);\n      const mm = digits.slice(4, 6);\n      if (+mm >= 1 && +mm <= 12) {\n        month = mm;\n        day = digits.slice(6, 7).padStart(2, \"0\");\n      } else {\n        month = digits.slice(4, 5).padStart(2, \"0\");\n        day = digits.slice(5, 7);\n      }\n    } else if (digits.length === 6) {\n      year = digits.slice(0, 4);\n      month = digits.slice(4, 5).padStart(2, \"0\");\n      day = digits.slice(5, 6).padStart(2, \"0\");\n    } else {\n      return null;\n    }\n\n    return `${year}-${month}-${day}T00:00:00.000Z`;\n  })()\n}}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          912,
+          96
+        ],
+        "id": "03d20d8c-b8a5-40f3-bdd9-3992348194e5",
+        "name": "Set inputs"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "fact_web_traffic_metrics",
+            "mode": "list",
+            "cachedResultName": "fact_web_traffic_metrics"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "brand_id": "={{ $json.brand_id }}",
+              "snapshot_date_id": "={{ $json.snapshot_date_id }}",
+              "metric_code": "={{ $json.metric_code }}",
+              "value": "={{ $json.value }}",
+              "source_endpoint": "={{ $json.source_endpoint }}",
+              "stats_from_utc": "={{ $json.date_utc }}",
+              "stats_to_utc": "={{ $json.date_utc }}"
+            },
+            "matchingColumns": [
+              "snapshot_date_id",
+              "brand_id",
+              "metric_code"
+            ],
+            "schema": [
+              {
+                "id": "fact_id",
+                "displayName": "fact_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "snapshot_date_id",
+                "displayName": "snapshot_date_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "metric_code",
+                "displayName": "metric_code",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "value",
+                "displayName": "value",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "source_endpoint",
+                "displayName": "source_endpoint",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "stats_from_utc",
+                "displayName": "stats_from_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "stats_to_utc",
+                "displayName": "stats_to_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false
+              },
+              {
+                "id": "loaded_at_utc",
+                "displayName": "loaded_at_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1136,
+          192
+        ],
+        "id": "7d0299a5-4057-4443-97c2-d521a6552310",
+        "name": "Insert webpage facts",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "value": "dwh",
+            "mode": "list",
+            "cachedResultName": "dwh"
+          },
+          "table": {
+            "__rl": true,
+            "value": "staging_metricool_events",
+            "mode": "list",
+            "cachedResultName": "staging_metricool_events"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "brand_id": 1,
+              "endpoint": "={{ $json.source_endpoint }}",
+              "raw_json": "={{ $json }}",
+              "social_network": "16"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "brand_id",
+                "displayName": "brand_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "social_network",
+                "displayName": "social_network",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "endpoint",
+                "displayName": "endpoint",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "raw_json",
+                "displayName": "raw_json",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "fetched_at_utc",
+                "displayName": "fetched_at_utc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1136,
+          0
+        ],
+        "id": "f0b4238f-8c77-4bda-b1cc-3a62dda3407e",
+        "name": "Insert staging",
+        "credentials": {
+          "postgres": {
+            "id": "re5OmKdxt35y8szi",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {}
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          16,
+          96
+        ],
+        "id": "1b6e3be5-d9a2-4fab-aaf4-98eb109caae2",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "Get page metrics": {
+        "main": [
+          [
+            {
+              "node": "Set inputs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Settings": {
+        "main": [
+          [
+            {
+              "node": "Split metrics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split metrics": {
+        "main": [
+          [
+            {
+              "node": "Get page metrics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set inputs": {
+        "main": [
+          [
+            {
+              "node": "Insert staging",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Insert webpage facts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Settings",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Javier Guerra",
+    "name": "Version 4b2eb122",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "4b2eb122-9459-4800-b469-ff4cd5d2f9b4",
+  "connections": {
+    "Get page metrics": {
+      "main": [
+        [
+          {
+            "node": "Set inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Split metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split metrics": {
+      "main": [
+        [
+          {
+            "node": "Get page metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set inputs": {
+      "main": [
+        [
+          {
+            "node": "Insert staging",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert webpage facts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-28T04:43:24.326Z",
+  "id": "MKJxNKpvtZGZghnJ",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "dwh_webpage_ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://app.metricool.com/api/stats/timeline/{{ $json.metric_list }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.to }}"
+            },
+            {
+              "name": "blogId",
+              "value": "2539662"
+            },
+            {
+              "name": "userId",
+              "value": "2065617"
+            },
+            {
+              "name": "userToken",
+              "value": "WKUBNYGKRXZASRKJYXOJVKHQCPTBGQTMVJHSZKZUNEPPMTEYVRQRAGZEYXLSTJAU"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "AWSALB=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT; AWSALBCORS=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT"
+            },
+            {
+              "name": "cookie",
+              "value": "AWSALB=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT;AWSALBCORS=bYk6QXMmmLMwU3orjreMDrmLlNg2ib0ZTl9ZZF4RVPKQVOUrzvZzwlN2jLp+9QJ6iKNxZhRGk7mBUsNJOMJi9XNZ9h7v43vNsq04/TgXWTaFqGrbR9D4TLlnc/FT;"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        688,
+        96
+      ],
+      "id": "a9ad6005-d774-47ba-9437-9d69fef306bb",
+      "name": "Get page metrics"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0d3ca5a5-5e6b-4255-90d5-d650c444f457",
+              "name": "metric_list",
+              "value": "[\"Visitors\", \"PageViews\"]",
+              "type": "array"
+            },
+            {
+              "id": "95c82b91-39a0-4258-91b3-ba2bbb1b97b5",
+              "name": "from",
+              "value": "={{ $now.minus(2, 'days').format('yyyyMMdd') }}",
+              "type": "string"
+            },
+            {
+              "id": "4ed374a1-5efb-4315-9b4c-671acb5c71ef",
+              "name": "to",
+              "value": "={{ $now.format('yyyyMMdd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        96
+      ],
+      "id": "68dc3449-2e6c-431a-b592-42f4955bd88e",
+      "name": "Settings"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "metric_list",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        464,
+        96
+      ],
+      "id": "fb5bdfed-c97d-4500-9e82-1efd4c45626b",
+      "name": "Split metrics"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6cf9a76-ec9c-4ec5-b848-a0a5daeb693b",
+              "name": "brand_id",
+              "value": 1,
+              "type": "number"
+            },
+            {
+              "id": "cf085c3f-c448-4bda-b533-bd0744eec109",
+              "name": "snapshot_date_id",
+              "value": "={{ \n  (() => {\n    const v = $json[\"0\"];\n    if (v === null || v === undefined || v === '') return null;\n\n    const s = String(v).trim();\n    const digits = s.replace(/\\D/g, '');\n    if (!digits) return null;\n\n    // Epoch en ms (13) o s (10)\n    if (digits.length === 13 || digits.length === 10) {\n      const ms = digits.length === 10 ? Number(digits) * 1000 : Number(digits);\n      const dt = new Date(ms);\n      const y = dt.getUTCFullYear();\n      const m = String(dt.getUTCMonth() + 1).padStart(2, '0');\n      const d = String(dt.getUTCDate()).padStart(2, '0');\n      return Number(`${y}${m}${d}`);\n    }\n\n    // Si ya viene yyyyMMdd\n    if (digits.length === 8) return Number(digits);\n\n    return null;\n  })()\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "8cd3f42e-5120-4247-b1c5-71830cef7ef3",
+              "name": "metric_code",
+              "value": "={{ $('Split metrics').item.json.metric_list }}",
+              "type": "string"
+            },
+            {
+              "id": "fa52aaee-3d57-4dd3-b494-811fc02185e3",
+              "name": "value",
+              "value": "={{ $json['1'] }}",
+              "type": "number"
+            },
+            {
+              "id": "2ab68e84-524b-4152-b77a-a60f4af22563",
+              "name": "source_endpoint",
+              "value": "=/stats/timeline/{{ $('Split metrics').item.json.metric_list }}",
+              "type": "string"
+            },
+            {
+              "id": "bf6a2e8b-134c-4746-befa-3e22eddbe03f",
+              "name": "date_utc",
+              "value": "={{\n  (() => {\n    const v = $json[\"0\"];\n    if (v === null || v === undefined || v === '') return null;\n\n    // 1) Si viene como número (o string numérico) tipo epoch\n    const s = String(v).trim();\n\n    // ISO date: 2024-10-01 o 2024-10-01T...\n    const iso = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n    if (iso) {\n      const [, y, m, d] = iso;\n      return `${y}-${m}-${d}T00:00:00.000Z`;\n    }\n\n    // Solo dígitos\n    const digits = s.replace(/\\D/g, '');\n    if (!digits) return null;\n\n    // Epoch seconds (10) o ms (13)\n    if (digits.length === 10 || digits.length === 13) {\n      const ms = digits.length === 10 ? Number(digits) * 1000 : Number(digits);\n      const dt = new Date(ms);\n      if (isNaN(dt.getTime())) return null;\n      return dt.toISOString().slice(0, 10) + \"T00:00:00.000Z\";\n    }\n\n    // Date id yyyyMMdd / variantes\n    let year, month, day;\n\n    if (digits.length === 8) {\n      year = digits.slice(0, 4);\n      month = digits.slice(4, 6);\n      day = digits.slice(6, 8);\n    } else if (digits.length === 7) {\n      year = digits.slice(0, 4);\n      const mm = digits.slice(4, 6);\n      if (+mm >= 1 && +mm <= 12) {\n        month = mm;\n        day = digits.slice(6, 7).padStart(2, \"0\");\n      } else {\n        month = digits.slice(4, 5).padStart(2, \"0\");\n        day = digits.slice(5, 7);\n      }\n    } else if (digits.length === 6) {\n      year = digits.slice(0, 4);\n      month = digits.slice(4, 5).padStart(2, \"0\");\n      day = digits.slice(5, 6).padStart(2, \"0\");\n    } else {\n      return null;\n    }\n\n    return `${year}-${month}-${day}T00:00:00.000Z`;\n  })()\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        96
+      ],
+      "id": "03d20d8c-b8a5-40f3-bdd9-3992348194e5",
+      "name": "Set inputs"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "fact_web_traffic_metrics",
+          "mode": "list",
+          "cachedResultName": "fact_web_traffic_metrics"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "brand_id": "={{ $json.brand_id }}",
+            "snapshot_date_id": "={{ $json.snapshot_date_id }}",
+            "metric_code": "={{ $json.metric_code }}",
+            "value": "={{ $json.value }}",
+            "source_endpoint": "={{ $json.source_endpoint }}",
+            "stats_from_utc": "={{ $json.date_utc }}",
+            "stats_to_utc": "={{ $json.date_utc }}"
+          },
+          "matchingColumns": [
+            "snapshot_date_id",
+            "brand_id",
+            "metric_code"
+          ],
+          "schema": [
+            {
+              "id": "fact_id",
+              "displayName": "fact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "snapshot_date_id",
+              "displayName": "snapshot_date_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "metric_code",
+              "displayName": "metric_code",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "source_endpoint",
+              "displayName": "source_endpoint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "stats_from_utc",
+              "displayName": "stats_from_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "stats_to_utc",
+              "displayName": "stats_to_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "loaded_at_utc",
+              "displayName": "loaded_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1136,
+        192
+      ],
+      "id": "7d0299a5-4057-4443-97c2-d521a6552310",
+      "name": "Insert webpage facts",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "dwh",
+          "mode": "list",
+          "cachedResultName": "dwh"
+        },
+        "table": {
+          "__rl": true,
+          "value": "staging_metricool_events",
+          "mode": "list",
+          "cachedResultName": "staging_metricool_events"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "brand_id": 1,
+            "endpoint": "={{ $json.source_endpoint }}",
+            "raw_json": "={{ $json }}",
+            "social_network": "16"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "brand_id",
+              "displayName": "brand_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "social_network",
+              "displayName": "social_network",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "endpoint",
+              "displayName": "endpoint",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_json",
+              "displayName": "raw_json",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fetched_at_utc",
+              "displayName": "fetched_at_utc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1136,
+        0
+      ],
+      "id": "f0b4238f-8c77-4bda-b1cc-3a62dda3407e",
+      "name": "Insert staging",
+      "credentials": {
+        "postgres": {
+          "id": "re5OmKdxt35y8szi",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        96
+      ],
+      "id": "1b6e3be5-d9a2-4fab-aaf4-98eb109caae2",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-12-03T00:00:07.030-05:00",
+          "Readable date": "December 3rd 2025, 12:00:07 am",
+          "Readable time": "12:00:07 am",
+          "Day of week": "Wednesday",
+          "Year": "2025",
+          "Month": "December",
+          "Day of month": "03",
+          "Hour": "00",
+          "Minute": "00",
+          "Second": "07",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-28T04:43:24.326Z",
+      "createdAt": "2025-11-28T04:43:24.326Z",
+      "role": "workflow:owner",
+      "workflowId": "MKJxNKpvtZGZghnJ",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-06T17:41:11.347Z",
+  "versionId": "4b2eb122-9459-4800-b469-ff4cd5d2f9b4"
+}
