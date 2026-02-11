@@ -1,0 +1,228 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "basePath": "workflows",
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Video settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video settings": {
+      "main": [
+        [
+          {
+            "node": "Create video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create video": {
+      "main": [
+        [
+          {
+            "node": "Get created video status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-02T20:04:25.474Z",
+  "id": "7v1As87i5xMTzJZy",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "video_creation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "09a319f3-c473-49f9-8304-bce969c15a4d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://alchemy.stream/api/v1/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Basic YW5uaXFfYWRtaW46YW5uaXFfc2VjdXJlXzIwMjU="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"song_url\": \"{{ $json.song_url }}\",\n  \"song_start\": {{ $json.song_start }},\n  \"song_end\": {{ $json.song_end }},\n  \"prompt\": \"{{ $json.video_prompt }}\",\n  \"event_details\": {\n    \"title\": \"{{ $json.video_title }}\"\n  }\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "6f4fee88-c2e1-4adb-aace-2f2d7f139e51",
+      "name": "Create video"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03564b9e-9378-4645-8c1b-2efabace75e5",
+              "name": "song_url",
+              "value": "https://music.apple.com/co/song/empire-ants-feat-little-dragon/859844936",
+              "type": "string"
+            },
+            {
+              "id": "f63b4b24-b6b9-43df-aa12-5af0ac3a7273",
+              "name": "song_start",
+              "value": "0",
+              "type": "string"
+            },
+            {
+              "id": "6f68a5cb-b395-4dc2-ba4b-53c3c265f180",
+              "name": "song_end",
+              "value": "3000",
+              "type": "string"
+            },
+            {
+              "id": "5d93c53e-c9e2-4112-ab6c-5a4b61180d7e",
+              "name": "video_prompt",
+              "value": "Test",
+              "type": "string"
+            },
+            {
+              "id": "00a6245f-7660-47c9-b0ec-6d661e9c81df",
+              "name": "video_title",
+              "value": "Test2",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1ed3cc1d-64ce-4453-872e-b4935016a26a",
+      "name": "Video settings"
+    },
+    {
+      "parameters": {
+        "url": "=https://alchemy.stream/api/v1/media/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer Basic YW5uaXFfYWRtaW46YW5uaXFfc2VjdXJlXzIwMjU="
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "46777c75-a4f7-4fdc-aba5-270d13eaf43b",
+      "name": "Get created video status"
+    },
+    {
+      "parameters": {
+        "url": "https://alchemy.stream/api/v1/media/115",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer Basic YW5uaXFfYWRtaW46YW5uaXFfc2VjdXJlXzIwMjU="
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        224
+      ],
+      "id": "c450ecf4-acd8-457b-95ae-d932c73e0222",
+      "name": "Get video status"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "jwar28",
+    "name": "n8n-interns-intance-backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-02T20:04:25.474Z",
+      "createdAt": "2025-12-02T20:04:25.474Z",
+      "role": "workflow:owner",
+      "workflowId": "7v1As87i5xMTzJZy",
+      "projectId": "bmvDuE1r6YNTedFD"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-06T17:50:06.702Z",
+  "versionId": "97cafb9b-51fa-4371-9e4a-351efc1aac9b"
+}
